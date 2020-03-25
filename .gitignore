@@ -1,0 +1,27 @@
+# env
+Pipfile
+Pipfile.lock
+env/
+.env
+
+### Django ###
+*.log
+*.pot
+*.pyc
+*.manifest
+*.spec
+__pycache__/
+db.sqlite3
+build/
+
+### OSX ###
+.DS_Store
+.idea
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml

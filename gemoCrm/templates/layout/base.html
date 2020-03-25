@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Easily usable CRM">
+
+        <title>{% block title %}{% endblock %}</title>
+
+        {% block stylesheets %}{% endblock stylesheets %}
+    </head>
+    <body>
+        <header>
+            {% block header %}{% endblock %}
+        </header>
+
+        {% block content %}{% endblock %}
+
+        <footer>
+            {% block footer %}{% endblock %}
+        </footer>
+
+        {% block javascripts %}{% endblock javascripts %}
+    </body>
+</html>
