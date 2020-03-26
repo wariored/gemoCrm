@@ -1,0 +1,24 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Startup: Startup Detail
+{% endblock %}
+{% block dashboard_title %}
+    Startup Detail
+{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Startup Details #{{ startup.name }}</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Startup Name</dt>
+                <dd class="col-sm-9">{{ startup.name }}</dd>
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">{{ startup.email }}</dd>
+            </dl>
+        </div>
+    </div>
+    <button  onclick="location.href='{% url 'clients:update-startup' startup.id %}'" class="btn btn-default animation-on-hover" type="button">Update</button>
+{% endblock %}

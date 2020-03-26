@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Hacker: Details
+{% endblock %}
+{% block dashboard_title %}
+    Hacker Details
+{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Hacker Details #{{ hacker.first_name }} {{ hacker.last_name }}</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">First Name</dt>
+                <dd class="col-sm-9">{{ hacker.first_name }}</dd>
+                <dt class="col-sm-3">Last Name</dt>
+                <dd class="col-sm-9">{{ hacker.last_name }}</dd>
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">{{ hacker.email }}</dd>
+            </dl>
+        </div>
+    </div>
+    <button onclick="location.href='{% url 'clients:update-hacker' hacker.id %}'"
+            class="btn btn-default animation-on-hover" type="button">Update
+    </button>
+{% endblock %}

@@ -13,6 +13,7 @@ env/
 __pycache__/
 db.sqlite3
 build/
+staticfiles/
 
 ### OSX ###
 .DS_Store

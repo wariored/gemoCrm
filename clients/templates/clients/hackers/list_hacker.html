@@ -1,0 +1,53 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Hacker: List of Hackers
+{% endblock %}
+{% block dashboard_title %}
+    Hacker List
+{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center">#</th>
+                <th>FirstName</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>country</th>
+                <th class="text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for hacker in hackers %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td>{{ hacker.first_name }}</td>
+                        <td>{{ hacker.last_name }}</td>
+                        <td>{{ hacker.email }}</td>
+                        <td>{{ hacker.country }}</td>
+                        <td class="td-actions text-right">
+                            <button onclick="location.href='{% url 'clients:detail-hacker' hacker.id %}'"
+                                    type="button"
+                                    rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon">
+                                <i class="tim-icons icon-single-02"></i>
+                            </button>
+                            <button onclick="location.href='{% url 'clients:update-hacker' hacker.id %}'"
+                                    type="button"
+                                    rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon">
+                                <i class="tim-icons icon-settings"></i>
+                            </button>
+                            <button type="button" rel="tooltip" class="btn btn-danger btn-sm btn-round btn-icon">
+                                <i class="tim-icons icon-simple-remove"></i>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if is_paginated %}
+            {% include "layout/_pagination.html" %}
+        {% endif %}
+    </div>
+{% endblock %}
