@@ -1,0 +1,27 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Jobs index page
+{% endblock %}
+{% block dashboard_title %}
+    Jobs
+{% endblock %}
+{% block content %}
+    <h2 class="text-center">Jobs Section</h2>
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Job Positions</h4>
+            <button class="btn btn-success animation-on-hover" type="button">Create</button>
+            <button onclick="location.href='{% url 'clients:list-job-position' %}'" class="btn btn-info animation-on-hover"
+                    type="button">View All
+            </button>
+        </div>
+        <div class="col-sm-6">
+            <h4>Job applications</h4>
+            <button class="btn btn-success animation-on-hover" type="button">Create</button>
+            <button onclick="location.href='{% url 'clients:list-job-application' %}'" class="btn btn-info animation-on-hover"
+                    type="button">View All
+            </button>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Job Position: Details
+{% endblock %}
+{% block dashboard_title %}
+    Job Position Details
+{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Job Position Details #{{ job_position.external_id }}</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 text-info">Postion ID</dt>
+                <dd class="col-sm-9">{{ job_position.external_id }}</dd>
+                <dt class="col-sm-3 text-info">Name</dt>
+                <dd class="col-sm-9">{{ job_position.name }}</dd>
+                <dt class="col-sm-3 text-info">Hackers Applied</dt>
+                <dd class="col-sm-9">{% for job_application in job_position.job_applications.all %}
+                    {% ifchanged %}
+                        #<a class="text-warning" href="{% url 'clients:detail-hacker' job_application.hacker.id %}">{{ job_application.hacker }}</a>
+                    {% endifchanged %}
+                {% endfor %}</dd>
+            </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}

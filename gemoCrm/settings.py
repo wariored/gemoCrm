@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'kronos',
     'gemoCrm',
     'clients'
 ]
@@ -120,7 +121,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -135,3 +135,7 @@ MEDIA_ROOT = (
 )
 
 LOGIN_URL = "login"
+
+# GreenHouse
+GREEN_HOUSE_TOKEN = os.environ.get("GREEN_HOUSE_TOKEN")
+GREEN_HOUSE_CANDIDATES_URL = "https://harvest.greenhouse.io/v1/candidates"

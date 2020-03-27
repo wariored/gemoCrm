@@ -1,38 +1,37 @@
 {% extends 'layout/base.html' %}
 {% load widget_tweaks %}
 {% block title %}
-    Startup: List of startups
+    Job position: List of job_positions
 {% endblock %}
 {% block dashboard_title %}
-    Startups list
+    Job positions list
 {% endblock %}
 {% block content %}
     <div class="table-responsive">
+
         <table class="table">
             <thead>
             <tr>
                 <th class="text-center">#</th>
+                <th>Id</th>
                 <th>Name</th>
-                <th>Email</th>
-                <th>Country</th>
-                <th>Postal Code</th>
+                <th>Number of Applicants</th>
                 <th class="text-right">Actions</th>
             </tr>
             </thead>
             <tbody>
-                {% for startup in startups %}
+                {% for job_position in job_positions %}
                     <tr>
                         <td class="text-center">{{ forloop.counter }}</td>
-                        <td>{{ startup.name }}</td>
-                        <td>{{ startup.email }}</td>
-                        <td>{{ startup.country }}</td>
-                        <td>{{ startup.postal_code }}</td>
+                        <td>{{ job_position.external_id }}</td>
+                        <td>{{ job_position.name }}</td>
+                        <td>{{ job_position.job_applications.count }}</td>
                         <td class="td-actions text-right">
-                            <button onclick="location.href='{% url 'clients:detail-startup' startup.id %}'"
+                            <button onclick="location.href='{% url 'clients:detail-job-position' job_position.id %}'"
                                     type="button" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon">
-                                <i class="tim-icons icon-single-02"></i>
+                                <i class="tim-icons icon-wallet-43"></i>
                             </button>
-                            <button onclick="location.href='{% url 'clients:update-startup' startup.id %}'"
+                            <button
                                     type="button"
                                     rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon">
                                 <i class="tim-icons icon-settings"></i>

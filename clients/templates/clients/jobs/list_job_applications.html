@@ -1,13 +1,14 @@
 {% extends 'layout/base.html' %}
 {% load widget_tweaks %}
 {% block title %}
-    Startup: List of startups
+    Job application: List of job_applications
 {% endblock %}
 {% block dashboard_title %}
-    Startups list
+    Job applications list
 {% endblock %}
 {% block content %}
     <div class="table-responsive">
+
         <table class="table">
             <thead>
             <tr>
@@ -20,19 +21,19 @@
             </tr>
             </thead>
             <tbody>
-                {% for startup in startups %}
+                {% for job_application in job_applications %}
                     <tr>
                         <td class="text-center">{{ forloop.counter }}</td>
-                        <td>{{ startup.name }}</td>
-                        <td>{{ startup.email }}</td>
-                        <td>{{ startup.country }}</td>
-                        <td>{{ startup.postal_code }}</td>
+                        <td>{{ job_application.external_id }}</td>
+                        <td>{{ job_application.email }}</td>
+                        <td>{{ job_application.country }}</td>
+                        <td>{{ job_application.postal_code }}</td>
                         <td class="td-actions text-right">
-                            <button onclick="location.href='{% url 'clients:detail-startup' startup.id %}'"
+                            <button onclick="location.href='{% url 'clients:detail-job-application' job_application.id %}'"
                                     type="button" rel="tooltip" class="btn btn-info btn-sm btn-round btn-icon">
                                 <i class="tim-icons icon-single-02"></i>
                             </button>
-                            <button onclick="location.href='{% url 'clients:update-startup' startup.id %}'"
+                            <button
                                     type="button"
                                     rel="tooltip" class="btn btn-success btn-sm btn-round btn-icon">
                                 <i class="tim-icons icon-settings"></i>

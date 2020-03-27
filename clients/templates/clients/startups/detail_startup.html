@@ -1,24 +1,42 @@
 {% extends 'layout/base.html' %}
 {% load widget_tweaks %}
 {% block title %}
-    Startup: Startup Detail
+    Startup: Startup Details
 {% endblock %}
 {% block dashboard_title %}
-    Startup Detail
+    Startup Details
 {% endblock %}
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Startup Details #{{ startup.name }}</h5>
+            <h5 class="card-title">Startup Details #{{ startup.name|cut:" " }}</h5>
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-3">Startup Name</dt>
+                <dt class="col-sm-3 text-info ">Startup Name</dt>
                 <dd class="col-sm-9">{{ startup.name }}</dd>
-                <dt class="col-sm-3">Email</dt>
+                <dt class="col-sm-3 text-info ">Email</dt>
                 <dd class="col-sm-9">{{ startup.email }}</dd>
+                <dt class="col-sm-3 text-info">City</dt>
+                <dd class="col-sm-9">{{ startup.city }}</dd>
+                <dt class="col-sm-3 text-info">Country</dt>
+                <dd class="col-sm-9">{{ startup.country }}</dd>
+                <dt class="col-sm-3 text-info">Address</dt>
+                <dd class="col-sm-9">{{ startup.address }}</dd>
+                <dt class="col-sm-3 text-info">Postal Code</dt>
+                <dd class="col-sm-9">{{ startup.postal_code }}</dd>
+                <dt class="col-sm-3 text-info">Kind of startup</dt>
+                <dd class="col-sm-9">{{ startup.get_kind_display|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Hackers</dt>
+                <dd class="col-sm-9">
+                    {% for hacker in startup.hackers.all %}
+                        <a href="{{ hacker.get_absolute_url }}">#{{ hacker.first_name|cut:" " }}{{ hacker.last_name }} </a>
+                    {% endfor %}
+                </dd>
             </dl>
         </div>
     </div>
-    <button  onclick="location.href='{% url 'clients:update-startup' startup.id %}'" class="btn btn-default animation-on-hover" type="button">Update</button>
+    <button onclick="location.href='{% url 'clients:update-startup' startup.id %}'"
+            class="btn btn-default animation-on-hover" type="button">Update
+    </button>
 {% endblock %}

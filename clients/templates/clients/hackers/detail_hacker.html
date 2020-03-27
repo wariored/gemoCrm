@@ -9,17 +9,73 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Hacker Details #{{ hacker.first_name }} {{ hacker.last_name }}</h5>
+            <h5 class="card-title">Hacker Details #{{ hacker.first_name|cut:" " }}{{ hacker.last_name|cut:" " }}</h5>
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-3">First Name</dt>
+                <dt class="col-sm-3 text-info">First Name</dt>
                 <dd class="col-sm-9">{{ hacker.first_name }}</dd>
-                <dt class="col-sm-3">Last Name</dt>
+                <dt class="col-sm-3 text-info">Last Name</dt>
                 <dd class="col-sm-9">{{ hacker.last_name }}</dd>
-                <dt class="col-sm-3">Email</dt>
+                <dt class="col-sm-3 text-info">Email</dt>
                 <dd class="col-sm-9">{{ hacker.email }}</dd>
+                <dt class="col-sm-3 text-info">City</dt>
+                <dd class="col-sm-9">{{ hacker.city|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Country</dt>
+                <dd class="col-sm-9">{{ hacker.country }}</dd>
+                <dt class="col-sm-3 text-info">Address</dt>
+                <dd class="col-sm-9">{{ hacker.address|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Postal Code</dt>
+                <dd class="col-sm-9">{{ hacker.postal_code|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Fit status</dt>
+                <dd class="col-sm-9 text-primary">{{ hacker.get_fit_display|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Startup</dt>
+                <dd class="col-sm-9">
+                    {% if hacker.startup %}
+                        <a href="{{ hacker.startup.get_absolute_url }}">#{{ hacker.startup.name|cut:" " }}</a>
+                    {% endif %}
+                </dd>
+                <dt class="col-sm-3 text-info">About</dt>
+                <dd class="col-sm-9">{{ hacker.about|default:"" }}</dd>
             </dl>
+            <h4 class="text-center text-info">Job Applications Details</h4>
+            <div class="table-responsive border border-info">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>Application Id</th>
+                        <th>Status</th>
+                        <th>Position Ids</th>
+                        <th class="text-center">Rejected Reason</th>
+                        <th class="text-center">Applied at</th>
+                        <th class="text-center">Rejected At</th>
+                        <th>Source</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in hacker.job_applications.all %}
+                            <tr>
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td>{{ job.external_id }}</td>
+                                <td>{{ job.status }}</td>
+                                <td>
+                                    {% for position in job.positions.all %}
+                                        <a href="{% url 'clients:detail-job-position' position.id %}">#{{ position.external_id }}</a>
+                                    {% endfor %}
+                                </td>
+                                <td class="td-actions">{{ job.rejection_reason|default:"" }}</td>
+                                <td class="td-actions">{{ job.applied_at }}</td>
+                                <td class="td-actions">{{ job.rejected_at }}</td>
+                                <td>{{ job.source|default:"" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if is_paginated %}
+                    {% include "layout/_pagination.html" %}
+                {% endif %}
+            </div>
         </div>
     </div>
     <button onclick="location.href='{% url 'clients:update-hacker' hacker.id %}'"
