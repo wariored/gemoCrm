@@ -22,12 +22,15 @@ class LoginView(View):
     def post(self, request):
         email = request.POST['email']
         password = request.POST['password']
+        remember_me = request.POST.get('remember_me')
         user = authenticate_user(email, password)
         context = {}
 
         if user is not None:
             if user.is_active:
                 login(request, user)
+                if not remember_me:
+                    request.session.set_expiry(0)
 
                 return redirect(self.request.GET.get('next', '/'))
             else:
