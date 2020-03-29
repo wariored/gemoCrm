@@ -9,22 +9,35 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Job Position Details #{{ job_application.external_id }}</h5>
+            <h5 class="card-title">Job Application Details #{{ job_application.external_id }}</h5>
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-3 text-info">Postion ID</dt>
+                <dt class="col-sm-3 text-info">Application ID</dt>
                 <dd class="col-sm-9">{{ job_application.external_id }}</dd>
-                <dt class="col-sm-3 text-info">Name</dt>
-                <dd class="col-sm-9">{{ job_application.name }}</dd>
-                <dt class="col-sm-3 text-info">Hackers Applied</dt>
-                <dd class="col-sm-9">{% for job_application in job_application.job_applications.all %}
+                <dt class="col-sm-3 text-info">Hacker</dt>
+                <dd class="col-sm-9">
+                    <a href="{% url 'clients:detail-hacker' job_application.hacker.id %}">#{{ job_application.hacker }}</a>
+                </dd>
+                <dt class="col-sm-3 text-info">Status</dt>
+                <dd class="col-sm-9">{{ job_application.status|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Rejection Reason</dt>
+                <dd class="col-sm-9">{{ job_application.rejection_reason|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Applied at</dt>
+                <dd class="col-sm-9">{{ job_application.applied_at|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Rejected at</dt>
+                <dd class="col-sm-9">{{ job_application.rejected_at|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Source</dt>
+                <dd class="col-sm-9">{{ job_application.source|default:"" }}</dd>
+                <dt class="col-sm-3 text-info">Positions</dt>
+                <dd class="col-sm-9">{% for position in job_application.positions.all %}
                     {% ifchanged %}
-                        #<a class="text-warning" href="{% url 'clients:detail-hacker' job_application.hacker.id %}">{{ job_application.hacker }}</a>
+                        #<a class="text-warning"
+                            href="{% url 'clients:detail-job-position' position.id %}">{{ position.external_id }}</a>
                     {% endifchanged %}
                 {% endfor %}</dd>
             </dl>
-            </div>
         </div>
+    </div>
     </div>
 {% endblock %}

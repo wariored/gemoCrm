@@ -10,12 +10,12 @@
     <h2 class="text-center">Clients Section</h2>
     <div class="row">
         <div class="col-sm-6">
-            <h4>Hackers</h4>
+            <h4>Hackers (<span class="text-primary">{{ hackers_count }}</span>)</h4>
             <button  onclick="location.href='{% url 'clients:create-hacker' %}'" class="btn btn-success animation-on-hover" type="button">Create</button>
             <button onclick="location.href='{% url 'clients:list-hacker' %}'" class="btn btn-info animation-on-hover" type="button">View All</button>
         </div>
         <div class="col-sm-6">
-            <h4>Startups</h4>
+            <h4>Startups (<span class="text-primary">{{ startups_count }}</span>)</h4>
             <button onclick="location.href='{% url 'clients:create-startup'%}'" class="btn btn-success animation-on-hover" type="button">Create</button>
             <button onclick="location.href='{% url 'clients:list-startup'%}'" class="btn btn-info animation-on-hover" type="button">View All</button>
         </div>

@@ -13,7 +13,13 @@ from gemoCrm.utils.pagination_handler import get_pagination_data
 
 
 def client_index(request):
-    return render(request, 'clients/client_index.html')
+    hackers_count = Hacker.objects.count()
+    startups_count = Startup.objects.count()
+    context = {
+        'hackers_count': hackers_count,
+        'startups_count': startups_count
+    }
+    return render(request, 'clients/client_index.html', context)
 
 
 def import_from_greenhouse(request):
@@ -46,13 +52,26 @@ class HackerUpdateView(UpdateView):
 class HackerListView(ListView):
     model = Hacker
     template_name = 'clients/hackers/list_hacker.html'
-    paginate_by = 10
+    paginate_by = 20
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset()
+        position_id = self.request.GET.get('position')
+        if position_id:
+            queryset = queryset.filter(job_applications__positions__id=position_id).distinct()
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(HackerListView, self).get_context_data(**kwargs)
         hackers = self.get_queryset()
         page = self.request.GET.get('page')
         paginator = Paginator(hackers, self.paginate_by)
+
+        position_id = self.request.GET.get('position')
+        if position_id:
+            context['additional_params'] = f"&position={position_id}"
+            context['position'] = JobPosition.objects.get(pk=position_id)
+
         context['hackers'] = get_pagination_data(paginator, page)
         return context
 
@@ -108,7 +127,13 @@ class StartupDetailView(DetailView):
 # job section
 
 def client_jobs_index(request):
-    return render(request, 'clients/jobs/jobs_index.html')
+    job_positions_count = JobPosition.objects.count()
+    jobs_applications_count = JobApplication.objects.count()
+    context = {
+        'job_positions_count': job_positions_count,
+        'job_applications_count': jobs_applications_count
+    }
+    return render(request, 'clients/jobs/jobs_index.html', context)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -117,7 +142,14 @@ class JobPositionDetailView(DetailView):
     template_name = 'clients/jobs/detail_job_position.html'
     context_object_name = 'job_position'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        hackers_applied_count = Hacker.objects.filter(job_applications__positions=self.object).distinct().count()
+        context['hackers_applied_count'] = hackers_applied_count
+        return context
 
+
+@method_decorator(login_required, name='dispatch')
 class JobPositionListView(ListView):
     model = JobPosition
     template_name = 'clients/jobs/list_job_positions.html'
@@ -132,10 +164,18 @@ class JobPositionListView(ListView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class JobApplicationListView(ListView):
     model = JobApplication
     template_name = 'clients/jobs/list_job_applications.html'
     paginate_by = 8
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset()
+        position_id = self.request.GET.get('position')
+        if position_id:
+            queryset = queryset.filter(positions__id=position_id)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(JobApplicationListView, self).get_context_data(**kwargs)
@@ -143,4 +183,17 @@ class JobApplicationListView(ListView):
         page = self.request.GET.get('page')
         paginator = Paginator(job_applications, self.paginate_by)
         context['job_applications'] = get_pagination_data(paginator, page)
+
+        position_id = self.request.GET.get('position')
+        if position_id:
+            context['additional_params'] = f"&position={position_id}"
+            context['position'] = JobPosition.objects.get(pk=position_id)
+
         return context
+
+
+@method_decorator(login_required, name='dispatch')
+class JobApplicationDetailView(DetailView):
+    model = JobApplication
+    template_name = 'clients/jobs/detail_job_application.html'
+    context_object_name = 'job_application'

@@ -1,8 +1,8 @@
 import kronos
-import requests
+
+from clients.utils.client_helper import store_hackers_data
 
 
 @kronos.register('* * * * *')
 def import_hackers_data():
-    response = requests.get("http://127.0.0.1:8000/clients/hackers/import")
-    print(response)
+    store_hackers_data()

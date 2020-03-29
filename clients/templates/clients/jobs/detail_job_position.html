@@ -17,14 +17,17 @@
                 <dd class="col-sm-9">{{ job_position.external_id }}</dd>
                 <dt class="col-sm-3 text-info">Name</dt>
                 <dd class="col-sm-9">{{ job_position.name }}</dd>
-                <dt class="col-sm-3 text-info">Hackers Applied</dt>
-                <dd class="col-sm-9">{% for job_application in job_position.job_applications.all %}
-                    {% ifchanged %}
-                        #<a class="text-warning" href="{% url 'clients:detail-hacker' job_application.hacker.id %}">{{ job_application.hacker }}</a>
-                    {% endifchanged %}
-                {% endfor %}</dd>
+                <dt class="col-sm-3 text-info">Number of Applications</dt>
+                <dd class="col-sm-9">
+                    <a class="text-primary" href="{% url 'clients:list-job-application' %}?position={{ job_position.id }}">{{ job_position.job_applications.count }}</a>
+                </dd>
+                <dt class="col-sm-3 text-info">Number of Hackers Applied</dt>
+                <dd class="col-sm-9">
+                    <a class="text-warning"
+                       href="{% url 'clients:list-hacker' %}?position={{ job_position.id }}">{{ hackers_applied_count }}</a>
+                </dd>
             </dl>
-            </div>
         </div>
+    </div>
     </div>
 {% endblock %}

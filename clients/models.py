@@ -6,7 +6,7 @@ from django.urls import reverse
 class Client(models.Model):
     user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related", blank=True, null=True,
                              on_delete=models.PROTECT)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     city = models.CharField(max_length=250, null=True, blank=True)
     country = models.CharField(max_length=250, null=True, blank=True)
     address = models.CharField(max_length=250, null=True, blank=True)
@@ -26,6 +26,9 @@ class Startup(Client):
     name = models.CharField(max_length=250)
     kind = models.CharField(max_length=250, choices=KIND_CHOICES, null=True, blank=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -44,6 +47,9 @@ class Hacker(Client):
     last_name = models.CharField(max_length=250)
     fit = models.CharField(max_length=30, choices=FIT_CHOICES, null=True, blank=True)
     startup = models.ForeignKey(Startup, related_name="hackers", blank=True, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ['last_name']
 
     def __str__(self):
         return f"{self.first_name}{self.last_name}".replace(" ", "")
@@ -70,6 +76,9 @@ class JobApplication(models.Model):
     hacker = models.ForeignKey(Hacker, related_name="job_applications", on_delete=models.CASCADE,
                                null=True, blank=True)
     positions = models.ManyToManyField(JobPosition, related_name="job_applications", blank=True)
+
+    class Meta:
+        ordering = ['-applied_at']
 
     def __str__(self):
         return f"{self.external_id} {self.status} {self.hacker}"

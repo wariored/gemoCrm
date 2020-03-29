@@ -20,5 +20,6 @@ urlpatterns = [
     path('jobs/', views.client_jobs_index, name='client-jobs-index'),
     path('jobs/positions/<int:pk>', views.JobPositionDetailView.as_view(), name='detail-job-position'),
     path('jobs/positions/list', views.JobPositionListView.as_view(), name='list-job-position'),
+    path('jobs/applications/<int:pk>', views.JobApplicationDetailView.as_view(), name='detail-job-application'),
     path('jobs/applications/list', views.JobApplicationListView.as_view(), name='list-job-application'),
 ]
