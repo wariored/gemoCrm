@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -139,3 +140,7 @@ LOGIN_URL = "login"
 # GreenHouse
 GREEN_HOUSE_TOKEN = os.environ.get("GREEN_HOUSE_TOKEN")
 GREEN_HOUSE_CANDIDATES_URL = "https://harvest.greenhouse.io/v1/candidates"
+
+# activate heroku
+django_heroku.settings(locals())
+
