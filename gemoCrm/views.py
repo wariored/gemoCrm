@@ -3,8 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.views.generic import View
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import View, UpdateView
 
+from gemoCrm.forms import UserProfileForm
 from gemoCrm.utils.user_helper import authenticate_user
 
 
@@ -17,7 +20,11 @@ class LoginView(View):
     template_name = 'gemoCrm/login.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        next_url = request.GET.get('next', '')
+        context = {
+            'next_url': next_url
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request):
         email = request.POST['email']
@@ -31,8 +38,7 @@ class LoginView(View):
                 login(request, user)
                 if not remember_me:
                     request.session.set_expiry(0)
-
-                return redirect(self.request.GET.get('next', '/'))
+                return redirect(request.GET.get('next', '/'))
             else:
                 context['error_message'] = "user is not active"
         else:
@@ -45,3 +51,14 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect(settings.LOGIN_URL)
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdateView(UpdateView):
+    model = User
+    form_class = UserProfileForm
+    template_name = "gemoCrm/update_profile.html"
+
+    def get_success_url(self):
+        self.request.session['profile_update'] = 'updated'
+        return reverse_lazy('update-profile', kwargs={'pk': self.object.id})

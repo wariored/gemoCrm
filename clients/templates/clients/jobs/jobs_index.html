@@ -12,16 +12,46 @@
         <div class="col-sm-6">
             <h4>Job Positions (<span class="text-primary">{{ job_positions_count }}</span>)</h4>
             <button class="btn btn-success animation-on-hover" type="button">Create</button>
-            <button onclick="location.href='{% url 'clients:list-job-position' %}'" class="btn btn-info animation-on-hover"
+            <button onclick="location.href='{% url 'clients:list-job-position' %}'"
+                    class="btn btn-info animation-on-hover"
                     type="button">View All
             </button>
         </div>
         <div class="col-sm-6">
             <h4>Job applications (<span class="text-primary">{{ job_applications_count }}</span>)</h4>
             <button class="btn btn-success animation-on-hover" type="button">Create</button>
-            <button onclick="location.href='{% url 'clients:list-job-application' %}'" class="btn btn-info animation-on-hover"
+            <button onclick="location.href='{% url 'clients:list-job-application' %}'"
+                    class="btn btn-info animation-on-hover"
                     type="button">View All
             </button>
+            <div class="chart-area">
+                <canvas id="job-applications-pie-chart"></canvas>
+            </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        let config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: {{ chart_data|safe }},
+                    backgroundColor: ["rgb(165,210,27)", "rgb(134,133,242)", "rgb(120,200,161)", "rgb(165,73,199)"],
+                    label: 'Applications status',
+                    borderWidth: 0
+                }],
+                labels: {{ chart_labels|safe }}
+            },
+            options: {
+                responsive: true
+            }
+        };
+
+        window.onload = function () {
+            let ctx = document.getElementById('job-applications-pie-chart').getContext('2d');
+            window.myPie = new Chart(ctx, config);
+        };
+
+    </script>
 {% endblock %}

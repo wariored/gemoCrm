@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -12,6 +13,7 @@ from clients.utils.client_helper import store_hackers_data
 from gemoCrm.utils.pagination_handler import get_pagination_data
 
 
+@login_required
 def client_index(request):
     hackers_count = Hacker.objects.count()
     startups_count = Startup.objects.count()
@@ -22,6 +24,7 @@ def client_index(request):
     return render(request, 'clients/client_index.html', context)
 
 
+@login_required
 def import_from_greenhouse(request):
     store_hackers_data()
     return HttpResponse("done")
@@ -126,10 +129,22 @@ class StartupDetailView(DetailView):
 
 # job section
 
+@login_required
 def client_jobs_index(request):
+    chart_labels = []
+    chart_data = []
+    job_applications_grouped_by_status = JobApplication.objects.values('status').annotate(
+        count=Count('status')).order_by()
+    for group in job_applications_grouped_by_status:
+        chart_labels.append(group['status'])
+        chart_data.append(group['count'])
+
     job_positions_count = JobPosition.objects.count()
     jobs_applications_count = JobApplication.objects.count()
+
     context = {
+        'chart_labels': chart_labels,
+        'chart_data': chart_data,
         'job_positions_count': job_positions_count,
         'job_applications_count': jobs_applications_count
     }
