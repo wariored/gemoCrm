@@ -39,4 +39,6 @@
     <button onclick="location.href='{% url 'clients:update-startup' startup.id %}'"
             class="btn btn-default animation-on-hover" type="button">Update
     </button>
+    <br>
+    {% include 'clients/exchanges/_limited_exhanges_table.html' with client="startup" email=startup.email %}
 {% endblock %}

@@ -82,3 +82,45 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.external_id} {self.status} {self.hacker}"
+
+
+class Exchange(models.Model):
+    """
+    The conversation exchange between clients and teams
+    """
+    HACKER_TYPE = "H"
+    STARTUP_TYPE = "S"
+    TEAM_MEMBER_TYPE = "T"
+    EXCHANGE_ORIGIN_TYPE_CHOICES = (
+        (HACKER_TYPE, "Hacker"),
+        (STARTUP_TYPE, "Startup"),
+        (TEAM_MEMBER_TYPE, "Team Member")
+    )
+
+    message = models.TextField()
+    from_type = models.CharField(max_length=30, choices=EXCHANGE_ORIGIN_TYPE_CHOICES)
+    to_type = models.CharField(max_length=30, choices=EXCHANGE_ORIGIN_TYPE_CHOICES)
+    from_email = models.EmailField()
+    to_email = models.EmailField()
+    sent_date = models.DateTimeField(auto_now_add=True)
+    sent_date.editable = True
+
+    class Meta:
+        ordering = ['-sent_date']
+
+    def __str__(self):
+        return f"{self.pk}-{self.from_email}=>{self.to_email}"
+
+    def _option(self, value):
+        options = {
+            self.HACKER_TYPE: Hacker.objects.get(email=self.from_email),
+            self.STARTUP_TYPE: Startup.objects.get(email=self.from_email),
+            self.TEAM_MEMBER_TYPE: User.objects.get(email=self.from_email)
+        }
+        return options[value]
+
+    def get_from(self):
+        return self._option(self.from_email)
+
+    def get_to(self):
+        return self._option(self.to_email)

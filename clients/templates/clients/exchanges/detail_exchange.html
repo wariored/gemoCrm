@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Exchange Details
+{% endblock %}
+{% block dashboard_title %}
+    Exchange Details
+{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Exchange from <span class="text-success"> {{ exchange.get_from_type_display }}</span>
+                to <span class="text-success">{{ exchange.get_to_type_display }}</span></h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 text-info ">From</dt>
+                <dd class="col-sm-9">{{ exchange.from_email }}</dd>
+                <dt class="col-sm-3 text-info ">To</dt>
+                <dd class="col-sm-9">{{ exchange.to_email }}</dd>
+                <dt class="col-sm-3 text-info ">Sent at</dt>
+                <dd class="col-sm-9">{{ exchange.sent_date }}</dd>
+                <dt class="col-sm-3 text-info">Message</dt>
+                <dd class="col-sm-9">{{ exchange.message }}</dd>
+            </dl>
+        </div>
+    </div>
+{% endblock %}

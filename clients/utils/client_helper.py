@@ -3,9 +3,11 @@ from types import SimpleNamespace as Namespace
 
 import requests
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import IntegrityError
+from faker import Faker
 
-from clients.models import Hacker, JobApplication, JobPosition
+from clients.models import Hacker, JobApplication, JobPosition, Exchange, Startup
 
 
 def get_hackers():
@@ -79,3 +81,32 @@ def store_hackers_data():
             hacker = insert_hacker(data)
         if hacker is not None and len(data.applications) > 0:
             insert_hacker_job_applications(data.applications, hacker)
+
+
+def simulate_send_message(from_email, to_email, from_type, to_type, message):
+    Exchange.objects.create(message=message, from_email=from_email, to_email=to_email,
+                            from_type=from_type, to_type=to_type)
+
+
+def push_user_client_exchanges(fake, user, client, client_type):
+    message = fake.sentence()
+    simulate_send_message(from_email=user.email, to_email=client.email, from_type=Exchange.TEAM_MEMBER_TYPE,
+                          to_type=client_type, message=message)
+    message = fake.sentence()
+    simulate_send_message(from_email=client.email, to_email=user.email, from_type=client_type,
+                          to_type=Exchange.TEAM_MEMBER_TYPE, message=message)
+
+
+def simulate_exchanges(times=1):
+    Exchange.objects.all().delete()
+    hackers = Hacker.objects.all()
+    startups = Startup.objects.all()
+    users = User.objects.all()
+    fake = Faker()
+    while times > 0:
+        for user in users:
+            for hacker in hackers:
+                push_user_client_exchanges(fake=fake, user=user, client=hacker, client_type=Exchange.HACKER_TYPE)
+            for startup in startups:
+                push_user_client_exchanges(fake=fake, user=user, client=startup, client_type=Exchange.STARTUP_TYPE)
+        times -= 1

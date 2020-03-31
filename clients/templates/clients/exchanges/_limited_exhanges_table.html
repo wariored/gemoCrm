@@ -1,0 +1,34 @@
+<h4 class="text-center text-info">Exchanges
+    {% if exchanges %}
+        (<span class="text-primary">{{ exchanges.count }}</span>)
+    {% endif %}
+</h4>
+<div class="table-responsive border border-info">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Message</th>
+            <th class="text-right">Sent at</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for exchange in exchanges|slice:"3" %}
+                <tr>
+                    <td> {{ exchange.from_email }}</td>
+                    <td>{{ exchange.to_email }}</td>
+                    <td><a class="text-warning"
+                           href="{% url 'clients:detail-exchange' exchange.id %}">{{ exchange.message|truncatechars:"30" }}</a>
+                    </td>
+                    <td>{{ exchange.sent_date }}</td>
+                </tr>
+            {% endfor %}
+            {% if exchanges.count > 3 %}
+                <a class="float-right"
+                   href="{% url 'clients:list-exchange' %}?client={{client}}&email={{ email }}">View
+                    all exchanges</a>
+            {% endif %}
+        </tbody>
+    </table>
+</div>

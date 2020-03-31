@@ -1,0 +1,50 @@
+{% extends 'layout/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    Hacker: List of Hackers
+{% endblock %}
+{% block dashboard_title %}
+    Exchange List
+{% endblock %}
+{% block content %}
+    {% if hacker %}
+        <h2 class="text-center text-warning">Exchanges for hacker
+            <a href="{% url 'clients:detail-hacker' hacker.id %}">#{{ hacker }}</a>
+        </h2>
+    {% elif startup %}
+        <h2 class="text-center text-warning">Exchanges for startup
+            <a href="{% url 'clients:detail-startup' startup.id %}">#{{ startup }}</a>
+        </h2>
+    {% else %}
+        <h2 class="text-center text-warning">List of Exchanges</h2>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center">#</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Sent at</th>
+                <th>Message</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for exchange in exchanges %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td> {{ exchange.from_email }}</td>
+                        <td>{{ exchange.to_email }}</td>
+                        <td><a class="text-warning"
+                               href="{% url 'clients:detail-exchange' exchange.id %}">{{ exchange.message|truncatechars:"30" }}</a>
+                        </td>
+                        <td>{{ exchange.sent_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if is_paginated %}
+            {% include "layout/_pagination.html" %}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
 
 from clients.forms import HackerForm, StartupForm
-from clients.models import Hacker, Startup, JobPosition, JobApplication
+from clients.models import Hacker, Startup, JobPosition, JobApplication, Exchange
 from clients.utils.client_helper import store_hackers_data
 from gemoCrm.utils.pagination_handler import get_pagination_data
 
@@ -84,6 +84,13 @@ class HackerDetailView(DetailView):
     model = Hacker
     template_name = 'clients/hackers/detail_hacker.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        hacker = self.get_object()
+        exchanges = Exchange.objects.filter(Q(from_email=hacker.email) | Q(to_email=hacker.email))
+        context['exchanges'] = exchanges
+        return context
+
 
 # startup section
 
@@ -125,6 +132,13 @@ class StartupListView(ListView):
 class StartupDetailView(DetailView):
     model = Startup
     template_name = 'clients/startups/detail_startup.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        startup = self.get_object()
+        exchanges = Exchange.objects.filter(Q(from_email=startup.email) | Q(to_email=startup.email))
+        context['exchanges'] = exchanges
+        return context
 
 
 # job section
@@ -212,3 +226,54 @@ class JobApplicationDetailView(DetailView):
     model = JobApplication
     template_name = 'clients/jobs/detail_job_application.html'
     context_object_name = 'job_application'
+
+
+# exchange section
+
+class ExchangeDetailView(DetailView):
+    model = Exchange
+    template_name = 'clients/exchanges/detail_exchange.html'
+
+
+class ExchangeListView(ListView):
+    model = Exchange
+    template_name = 'clients/exchanges/list_exchange.html'
+    paginate_by = 8
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset()
+        email = self.request.GET.get('email')
+        if email:
+            queryset = queryset.filter(Q(from_email=email) | Q(to_email=email))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exchanges = self.get_queryset()
+        page = self.request.GET.get('page')
+        paginator = Paginator(exchanges, self.paginate_by)
+        context['exchanges'] = get_pagination_data(paginator, page)
+
+        client = self.request.GET.get('client')
+        email = self.request.GET.get('email')
+        if email:
+            additional_params = f"&email={email}"
+            if client == "hacker":
+                try:
+                    hacker = Hacker.objects.get(email=email)
+                except Hacker.DoesNotExist:
+                    pass
+                else:
+                    additional_params = additional_params + '&client=hacker'
+                    context['hacker'] = hacker
+            elif client == "startup":
+                try:
+                    startup = Startup.objects.get(email=email)
+                except Startup.DoesNotExist:
+                    pass
+                else:
+                    additional_params = additional_params + '&client=startup'
+                    context['startup'] = startup
+            context['additional_params'] = additional_params
+
+        return context

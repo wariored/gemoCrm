@@ -22,4 +22,7 @@ urlpatterns = [
     path('jobs/positions/list', views.JobPositionListView.as_view(), name='list-job-position'),
     path('jobs/applications/<int:pk>', views.JobApplicationDetailView.as_view(), name='detail-job-application'),
     path('jobs/applications/list', views.JobApplicationListView.as_view(), name='list-job-application'),
+    # exchange path
+    path('exchanges/list', views.ExchangeListView.as_view(), name='list-exchange'),
+    path('exchanges/<int:pk>', views.ExchangeDetailView.as_view(), name='detail-exchange'),
 ]
