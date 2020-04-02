@@ -1,5 +1,5 @@
 {% extends 'layout/base.html' %}
-{% load widget_tweaks %}
+{% load widget_tweaks client_extras %}
 {% block title %}
     Startup: Startup Details
 {% endblock %}
@@ -31,6 +31,21 @@
                 <dd class="col-sm-9">
                     {% for hacker in startup.hackers.all %}
                         <a href="{{ hacker.get_absolute_url }}">#{{ hacker.first_name|cut:" " }}{{ hacker.last_name }} </a>
+                    {% endfor %}
+                </dd>
+                <dt class="col-sm-3 text-info">Exchanges</dt>
+                {% exchanges_team_members_details startup.email as exchanges_grouped %}
+                <dd class="col-sm-9">
+                    {% for e_grouped_key, e_grouped_val in exchanges_grouped.items %}
+                        {% if e_grouped_val.count > 0 %}
+                            <a href="{% url 'clients:list-exchange' %}?client=startup&email={{ startup.email }}&email-member={{ e_grouped_key }}"
+                               class="text-success">{{ e_grouped_val.name }} =>
+                                {{ e_grouped_val.count }}
+                            </a>
+                            {% if not forloop.last %}
+                                <span class="text-warning">-</span>
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 </dd>
             </dl>

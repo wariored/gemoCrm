@@ -242,9 +242,12 @@ class ExchangeListView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset()
-        email = self.request.GET.get('email')
-        if email:
-            queryset = queryset.filter(Q(from_email=email) | Q(to_email=email))
+        email_client = self.request.GET.get('email')
+        email_member = self.request.GET.get('email-member')
+        if email_client:
+            queryset = queryset.filter(Q(from_email=email_client) | Q(to_email=email_client))
+        if email_member:
+            queryset = queryset.filter(Q(from_email=email_member) | Q(to_email=email_member))
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -255,12 +258,14 @@ class ExchangeListView(ListView):
         context['exchanges'] = get_pagination_data(paginator, page)
 
         client = self.request.GET.get('client')
-        email = self.request.GET.get('email')
-        if email:
-            additional_params = f"&email={email}"
+        email_client = self.request.GET.get('email')
+        email_member = self.request.GET.get('email-member')
+        additional_params = ""
+        if email_client:
+            additional_params = f"&email={email_client}"
             if client == "hacker":
                 try:
-                    hacker = Hacker.objects.get(email=email)
+                    hacker = Hacker.objects.get(email=email_client)
                 except Hacker.DoesNotExist:
                     pass
                 else:
@@ -268,12 +273,14 @@ class ExchangeListView(ListView):
                     context['hacker'] = hacker
             elif client == "startup":
                 try:
-                    startup = Startup.objects.get(email=email)
+                    startup = Startup.objects.get(email=email_client)
                 except Startup.DoesNotExist:
                     pass
                 else:
                     additional_params = additional_params + '&client=startup'
                     context['startup'] = startup
-            context['additional_params'] = additional_params
+        if email_member:
+            additional_params = additional_params + f"&email-member={email_member}"
+        context['additional_params'] = additional_params
 
         return context

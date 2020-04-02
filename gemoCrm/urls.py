@@ -19,11 +19,14 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = "gemoCrm"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('profile-update/<int:pk>', views.ProfileUpdateView.as_view(), name='update-profile'),
+    path('general-search/', views.GeneralSearchView.as_view(), name='general-search'),
     path('clients/', include('clients.urls'))
 ]

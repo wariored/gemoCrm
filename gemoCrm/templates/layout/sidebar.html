@@ -7,8 +7,9 @@
     </a>
 </div>
 <ul class="nav">
-    <li>
-        <a href="{% url 'index' %}">
+    {% url 'index' as index_url %}
+    <li {% if request.get_full_path == index_url %}class="active"{% endif %}>
+        <a href="{{ index_url }}">
             <i class="tim-icons icon-chart-pie-36"></i>
             <p>Dashboard</p>
         </a>

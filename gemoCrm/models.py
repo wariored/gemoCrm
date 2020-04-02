@@ -28,4 +28,4 @@ class UserProfile(models.Model):
     roles = models.ManyToManyField(Role, related_name="user_profiles")
 
     def __str__(self):
-        return self.user
+        return f"{self.user}"

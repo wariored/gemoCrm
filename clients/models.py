@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 class Client(models.Model):
@@ -102,8 +103,7 @@ class Exchange(models.Model):
     to_type = models.CharField(max_length=30, choices=EXCHANGE_ORIGIN_TYPE_CHOICES)
     from_email = models.EmailField()
     to_email = models.EmailField()
-    sent_date = models.DateTimeField(auto_now_add=True)
-    sent_date.editable = True
+    sent_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-sent_date']
