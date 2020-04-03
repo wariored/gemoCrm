@@ -66,6 +66,9 @@ class JobPosition(models.Model):
     def __str__(self):
         return f"{self.external_id} {self.name}"
 
+    def get_absolute_url(self):
+        return reverse('clients:detail-job-position', kwargs={'pk': self.pk})
+
 
 class JobApplication(models.Model):
     external_id = models.BigIntegerField()
@@ -83,6 +86,9 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.external_id} {self.status} {self.hacker}"
+
+    def get_absolute_url(self):
+        return reverse('clients:detail-job-application', kwargs={'pk': self.pk})
 
 
 class Exchange(models.Model):
@@ -111,16 +117,21 @@ class Exchange(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.from_email}=>{self.to_email}"
 
-    def _option(self, value):
-        options = {
-            self.HACKER_TYPE: Hacker.objects.get(email=self.from_email),
-            self.STARTUP_TYPE: Startup.objects.get(email=self.from_email),
-            self.TEAM_MEMBER_TYPE: User.objects.get(email=self.from_email)
-        }
-        return options[value]
+    def get_absolute_url(self):
+        return reverse('clients:detail-exchange', kwargs={'pk': self.pk})
 
     def get_from(self):
-        return self._option(self.from_email)
+        return get_exchanges_object(self.from_type, self.from_email)
 
     def get_to(self):
-        return self._option(self.to_email)
+        return get_exchanges_object(self.to_type, self.to_email)
+
+
+def get_exchanges_object(value, email):
+    if value == Exchange.HACKER_TYPE:
+        return Hacker.objects.get(email=email)
+    elif value == Exchange.STARTUP_TYPE:
+        return Startup.objects.get(email=email)
+    elif value == Exchange.TEAM_MEMBER_TYPE:
+        return User.objects.get(email=email)
+    return None

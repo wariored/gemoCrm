@@ -116,7 +116,7 @@
                                             <ul class="dropdown-menu dropdown-navbar">
                                                 <li class="nav-link"><a href="{% url 'update-profile' user.id %}"
                                                                         class="nav-item dropdown-item">Profile</a></li>
-                                                <li class="nav-link"><a href="javascript:void(0)"
+                                                <li class="nav-link"><a href="{% url 'admin:index' %}"
                                                                         class="nav-item dropdown-item">Settings</a></li>
                                                 <li class="dropdown-divider"></li>
                                                 <li class="nav-link"><a href="{% url 'logout' %}"

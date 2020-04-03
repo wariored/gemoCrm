@@ -9,55 +9,79 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Hacker Details #{{ hacker.first_name|cut:" " }}{{ hacker.last_name|cut:" " }}</h5>
+            <h5 class="card-title">Hacker Details #{{ hacker }}</h5>
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-3 text-info">First Name</dt>
-                <dd class="col-sm-9">{{ hacker.first_name }}</dd>
-                <dt class="col-sm-3 text-info">Last Name</dt>
-                <dd class="col-sm-9">{{ hacker.last_name }}</dd>
-                <dt class="col-sm-3 text-info">Email</dt>
-                <dd class="col-sm-9">{{ hacker.email }}</dd>
-                <dt class="col-sm-3 text-info">City</dt>
-                <dd class="col-sm-9">{{ hacker.city|default:"" }}</dd>
-                <dt class="col-sm-3 text-info">Country</dt>
-                <dd class="col-sm-9">{{ hacker.country }}</dd>
-                <dt class="col-sm-3 text-info">Address</dt>
-                <dd class="col-sm-9">{{ hacker.address|default:"" }}</dd>
-                <dt class="col-sm-3 text-info">Postal Code</dt>
-                <dd class="col-sm-9">{{ hacker.postal_code|default:"" }}</dd>
-                <dt class="col-sm-3 text-info">Fit status</dt>
-                <dd class="col-sm-9 text-primary">{{ hacker.get_fit_display|default:"" }}</dd>
-                <dt class="col-sm-3 text-info">Startup</dt>
-                <dd class="col-sm-9">
-                    {% if hacker.startup %}
-                        <a href="{{ hacker.startup.get_absolute_url }}">#{{ hacker.startup.name|cut:" " }}</a>
-                    {% endif %}
-                </dd>
-                <dt class="col-sm-3 text-info">About</dt>
-                <dd class="col-sm-9">{{ hacker.about|default:"" }}</dd>
-                <dt class="col-sm-3 text-info">Exhanges</dt>
-                {% exchanges_team_members_details hacker.email as exchanges_grouped %}
-                <dd class="col-sm-9">
-                    {% for e_grouped_key, e_grouped_val in exchanges_grouped.items %}
-                        {% if e_grouped_val.count > 0 %}
-                            <a href="{% url 'clients:list-exchange' %}?client=hacker&email={{ hacker.email }}&email-member={{ e_grouped_key }}"
-                               class="text-success">{{ e_grouped_val.name }} =>
-                                {{ e_grouped_val.count }}
-                            </a>
-                            {% if not forloop.last %}
-                                <span class="text-warning">-</span>
-                            {% endif %}
+                <div class="col-sm-6">
+                    <dt class="text-white-50">First Name</dt>
+                    <dd class="">{{ hacker.first_name }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Last Name</dt>
+                    <dd class="">{{ hacker.last_name }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Email</dt>
+                    <dd class="">{{ hacker.email }}</dd>
+                </div>
+                <div class="col-sm-3">
+                    <dt class="text-white-50">City</dt>
+                    <dd class="">{{ hacker.city|default:"" }}</dd>
+                </div>
+                <div class="col-sm-3">
+                    <dt class="text-white-50">Country</dt>
+                    <dd class="">{{ hacker.country }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Address</dt>
+                    <dd class="">{{ hacker.address|default:"&nbsp;" }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Postal Code</dt>
+                    <dd class="">{{ hacker.postal_code|default:"&nbsp;" }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Fit status</dt>
+                    <dd class="">{{ hacker.get_fit_display|default:"&nbsp;" }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Startup</dt>
+                    <dd class="">
+                        {% if hacker.startup %}
+                            <a href="{{ hacker.startup.get_absolute_url }}">#{{ hacker.startup.name|cut:" " }}</a>
                         {% endif %}
-                    {% endfor %}
-
-                </dd>
+                    </dd>
+                </div>
+                <div class="col-sm-12">
+                    <dt class="text-white-50">About</dt>
+                    <dd class="">{{ hacker.about|default:"&nbsp;" }}</dd>
+                </div>
+                <div class="col-sm-12">
+                    <dt class="text-white-50">Exchanges
+                        {% exchanges_team_members_details hacker.email as exchanges_grouped %}
+                    <dd class="">
+                        {% for e_grouped_key, e_grouped_val in exchanges_grouped.items %}
+                            {% if e_grouped_val.count > 0 %}
+                                <a href="{% url 'clients:list-exchange' %}?client=hacker&email={{ hacker.email }}&email-member={{ e_grouped_key }}"
+                                   class="">{{ e_grouped_val.name }} =>
+                                    {{ e_grouped_val.count }}
+                                </a>
+                                {% if not forloop.last %}
+                                    <span class="text-warning">-</span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </dd>
+                </div>
+                <div class="col-sm-12">
+                    <button onclick="location.href='{% url 'clients:update-hacker' hacker.id %}'"
+                            class="btn btn-info btn-round animation-on-hover pull-right" type="button">Update
+                    </button>
+                </div>
             </dl>
-            <button onclick="location.href='{% url 'clients:update-hacker' hacker.id %}'"
-                    class="btn btn-default animation-on-hover" type="button">Update
-            </button>
-            <h4 class="text-center text-info">Job Applications Details</h4>
+
+            <h4 class="text-center text-white-50">Job Applications Details</h4>
             <div class="table-responsive border border-info">
                 <table class="table">
                     <thead>

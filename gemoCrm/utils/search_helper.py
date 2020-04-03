@@ -7,19 +7,19 @@ def get_search_result_reverse(search: str):
     if search.startswith('hacker:'):
         result = Hacker.objects.filter(email=extract_query(search, "hacker:"))
         if result:
-            return reverse("clients:detail-hacker", kwargs={'pk': result.first().id})
+            return result.first().get_absolute_url()
     elif search.startswith('startup:'):
         result = Startup.objects.filter(email=extract_query(search, "startup:"))
         if result:
-            return reverse("clients:detail-startup", kwargs={'pk': result.first().id})
+            return result.first().get_absolute_url()
     elif search.startswith('application:'):
         result = JobApplication.objects.filter(external_id=extract_query(search, "application:"))
         if result:
-            return reverse("clients:detail-job-application", kwargs={'pk': result.first().id})
+            return result.first().get_absolute_url()
     elif search.startswith('position:'):
         result = JobPosition.objects.filter(external_id=extract_query(search, "position:"))
         if result:
-            return reverse("clients:detail-job-position", kwargs={'pk': result.first().id})
+            return result.first().get_absolute_url()
     return None
 
 

@@ -10,7 +10,7 @@
     <h2 class="text-center">Jobs Section</h2>
     <div class="row">
         <div class="col-sm-6">
-            <h4>Job Positions (<span class="text-primary">{{ job_positions_count }}</span>)</h4>
+            <h4 class="text-white">Job Positions (<span class="text-primary">{{ job_positions_count }}</span>)</h4>
             <button class="btn btn-success animation-on-hover" type="button">Create</button>
             <button onclick="location.href='{% url 'clients:list-job-position' %}'"
                     class="btn btn-info animation-on-hover"
@@ -18,7 +18,7 @@
             </button>
         </div>
         <div class="col-sm-6">
-            <h4>Job applications (<span class="text-primary">{{ job_applications_count }}</span>)</h4>
+            <h4 class="text-white">Job applications (<span class="text-primary">{{ job_applications_count }}</span>)</h4>
             <button class="btn btn-success animation-on-hover" type="button">Create</button>
             <button onclick="location.href='{% url 'clients:list-job-application' %}'"
                     class="btn btn-info animation-on-hover"

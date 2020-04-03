@@ -8,11 +8,11 @@
 {% endblock %}
 {% block content %}
     {% if position %}
-        <h2 class="text-center text-warning">List of Hackers of Job position
+        <h2 class="text-center text-warning">Hackers of Job position
             <a href="{% url 'clients:detail-job-position' position.id %}">#{{ position.external_id }}</a>
         </h2>
     {% else %}
-        <h2 class="text-center text-warning">List of Hackers</h2>
+        <h2 class="text-center text-warning">Hackers</h2>
     {% endif %}
     <div class="table-responsive">
         <table class="table">

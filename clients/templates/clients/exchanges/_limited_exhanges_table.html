@@ -1,8 +1,4 @@
-<h4 class="text-center text-info">Exchanges Details
-    {% if exchanges %}
-        (<span class="text-primary">{{ exchanges.count }}</span>)
-    {% endif %}
-</h4>
+<h4 class="text-center text-white-50">Last Exchanges</h4>
 <div class="table-responsive border border-info">
     <table class="table">
         <thead>
@@ -18,7 +14,7 @@
                 <tr>
                     <td> {{ exchange.from_email }}</td>
                     <td>{{ exchange.to_email }}</td>
-                    <td><a class="text-warning"
+                    <td><a
                            href="{% url 'clients:detail-exchange' exchange.id %}">{{ exchange.message|truncatechars:"30" }}</a>
                     </td>
                     <td>{{ exchange.sent_date }}</td>
@@ -26,8 +22,8 @@
             {% endfor %}
             {% if exchanges.count > 3 %}
                 <a class="float-right"
-                   href="{% url 'clients:list-exchange' %}?client={{client}}&email={{ email }}">View
-                    all exchanges</a>
+                   href="{% url 'clients:list-exchange' %}?client={{ client }}&email={{ email }}">View
+                    all exchanges({{ exchanges.count }})</a>
             {% endif %}
         </tbody>
     </table>

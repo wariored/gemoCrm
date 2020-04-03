@@ -16,7 +16,7 @@
             <a href="{% url 'clients:detail-startup' startup.id %}">#{{ startup }}</a>
         </h2>
     {% else %}
-        <h2 class="text-center text-warning">List of Exchanges</h2>
+        <h2 class="text-center text-warning">Exchanges</h2>
     {% endif %}
     <div class="table-responsive">
         <table class="table">
@@ -25,8 +25,8 @@
                 <th class="text-center">#</th>
                 <th>From</th>
                 <th>To</th>
-                <th>Sent at</th>
                 <th>Message</th>
+                <th>Sent at</th>
             </tr>
             </thead>
             <tbody>

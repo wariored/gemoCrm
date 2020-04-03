@@ -13,19 +13,28 @@
         </div>
         <div class="card-body">
             <dl class="row">
-                <dt class="col-sm-3 text-info">Postion ID</dt>
-                <dd class="col-sm-9">{{ job_position.external_id }}</dd>
-                <dt class="col-sm-3 text-info">Name</dt>
-                <dd class="col-sm-9">{{ job_position.name }}</dd>
-                <dt class="col-sm-3 text-info">Number of Applications</dt>
-                <dd class="col-sm-9">
-                    <a class="text-primary" href="{% url 'clients:list-job-application' %}?position={{ job_position.id }}">{{ job_position.job_applications.count }}</a>
-                </dd>
-                <dt class="col-sm-3 text-info">Number of Hackers Applied</dt>
-                <dd class="col-sm-9">
-                    <a class="text-warning"
-                       href="{% url 'clients:list-hacker' %}?position={{ job_position.id }}">{{ hackers_applied_count }}</a>
-                </dd>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Position ID</dt>
+                    <dd class="">{{ job_position.external_id }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Name</dt>
+                    <dd class="">{{ job_position.name }}</dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Number of Application</dt>
+                    <dd class="">
+                        <a class=""
+                           href="{% url 'clients:list-job-application' %}?position={{ job_position.id }}">{{ job_position.job_applications.count }}</a>
+                    </dd>
+                </div>
+                <div class="col-sm-6">
+                    <dt class="text-white-50">Number of Hackers Applied</dt>
+                    <dd class="">
+                        <a class=""
+                           href="{% url 'clients:list-hacker' %}?position={{ job_position.id }}">{{ hackers_applied_count }}</a>
+                    </dd>
+                </div>
             </dl>
         </div>
     </div>
