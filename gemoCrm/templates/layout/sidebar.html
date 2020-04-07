@@ -11,7 +11,7 @@
     <li {% if request.get_full_path == index_url %}class="active"{% endif %}>
         <a href="{{ index_url }}">
             <i class="tim-icons icon-chart-pie-36"></i>
-            <p>Dashboard</p>
+            <p>Teams</p>
         </a>
     </li>
     {% url 'clients:client-index' as client_index_url %}
@@ -26,6 +26,13 @@
         <a href="{{ client_jobs_index_url }}">
             <i class="tim-icons icon-atom"></i>
             <p>Jobs</p>
+        </a>
+    </li>
+    {% url 'clients:list-exchange' as exchanges_url %}
+    <li {% if request.get_full_path == exchanges_url %}class="active"{% endif %}>
+        <a href="{{ exchanges_url }}">
+            <i class="tim-icons icon-chat-33"></i>
+            <p>Exchanges</p>
         </a>
     </li>
 </ul>

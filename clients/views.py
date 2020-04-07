@@ -239,11 +239,39 @@ class ExchangeListView(ListView):
     model = Exchange
     template_name = 'clients/exchanges/list_exchange.html'
     paginate_by = 8
+    additional_params = ""
+    result_filter = {}
 
     def get_queryset(self, *args, **kwargs):
+        self.result_filter = {}
         queryset = super().get_queryset()
+        from_email = self.request.GET.get('from-email')
+        to_email = self.request.GET.get('to-email')
+        from_date = self.request.GET.get('from-date')
+        to_date = self.request.GET.get('to-date')
+        message_contains = self.request.GET.get('message-contains')
         email_client = self.request.GET.get('email')
         email_member = self.request.GET.get('email-member')
+        if from_email:
+            queryset = queryset.filter(from_email=from_email)
+            self.additional_params += f"&from-email={from_email}"
+            self.result_filter["from"] = from_email
+        if to_email:
+            queryset = queryset.filter(to_email=to_email)
+            self.additional_params += f"&to-email={to_email}"
+            self.result_filter["to"] = to_email
+        if from_date:
+            queryset = queryset.filter(sent_date__gte=from_date)
+            self.additional_params += f"&from-date={from_date}"
+            self.result_filter["from_date"] = from_date
+        if to_date:
+            queryset = queryset.filter(sent_date__lte=to_date)
+            self.additional_params += f"&to-date={to_date}"
+            self.result_filter["to_date"] = to_date
+        if message_contains:
+            queryset = queryset.filter(message__icontains=message_contains)
+            self.additional_params += f"&message-contains={message_contains}"
+            self.result_filter["message_contains"] = message_contains
         if email_client:
             queryset = queryset.filter(Q(from_email=email_client) | Q(to_email=email_client))
         if email_member:
@@ -260,16 +288,15 @@ class ExchangeListView(ListView):
         client = self.request.GET.get('client')
         email_client = self.request.GET.get('email')
         email_member = self.request.GET.get('email-member')
-        additional_params = ""
         if email_client:
-            additional_params = f"&email={email_client}"
+            self.additional_params += f"&email={email_client}"
             if client == "hacker":
                 try:
                     hacker = Hacker.objects.get(email=email_client)
                 except Hacker.DoesNotExist:
                     pass
                 else:
-                    additional_params = additional_params + '&client=hacker'
+                    self.additional_params += '&client=hacker'
                     context['hacker'] = hacker
             elif client == "startup":
                 try:
@@ -277,10 +304,10 @@ class ExchangeListView(ListView):
                 except Startup.DoesNotExist:
                     pass
                 else:
-                    additional_params = additional_params + '&client=startup'
+                    self.additional_params += '&client=startup'
                     context['startup'] = startup
         if email_member:
-            additional_params = additional_params + f"&email-member={email_member}"
-        context['additional_params'] = additional_params
-
+            self.additional_params += f"&email-member={email_member}"
+        context['additional_params'] = self.additional_params
+        context['result_filter'] = self.result_filter
         return context

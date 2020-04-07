@@ -4,20 +4,85 @@
     Hacker: List of Hackers
 {% endblock %}
 {% block dashboard_title %}
-    Exchange List
+    Exchanges
 {% endblock %}
 {% block content %}
     {% if hacker %}
-        <h2 class="text-center text-warning">Exchanges for hacker
+        <h2 class="text-center text-info">Exchanges of hacker
             <a href="{% url 'clients:detail-hacker' hacker.id %}">#{{ hacker }}</a>
         </h2>
     {% elif startup %}
-        <h2 class="text-center text-warning">Exchanges for startup
+        <h2 class="text-center text-info">Exchanges of startup
             <a href="{% url 'clients:detail-startup' startup.id %}">#{{ startup }}</a>
         </h2>
     {% else %}
-        <h2 class="text-center text-warning">Exchanges</h2>
+        <h2 class="text-center text-info">Exchanges</h2>
     {% endif %}
+    <button class="btn btn-sm text-info collapsed">
+        Filters
+    </button>
+    <form action="" method="get">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-info" for="from">from</label>
+                    <div class="col-sm-10">
+                        <input name="from-email" type="email" class="form-control"
+                               id="from" aria-describedby="fromEmail" value="{{ result_filter.from }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label text-info" for="to">to</label>
+                    <div class="col-sm-10">
+                        <input name="to-email" type="email" class="form-control" id="to"
+                               aria-describedby="fromEmail" value="{{ result_filter.to }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-info" for="date-from">range</label>
+                    <div class="col-sm-10">
+                        <input id="date-from" class="form-control" type="date" name="from-date" max="3000-12-31"
+                               min="1000-01-01" value="{{ result_filter.from_date }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label text-info" for="date-to">and</label>
+                    <div class="col-sm-10">
+                        <input type="date" name="to-date" max="3000-12-31"
+                               min="1000-01-01" class="form-control" id="date-to" value="{{ result_filter.to_date }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label text-info" for="message-contains">contains</label>
+                    <div class="col-sm-9">
+                        <input name="message-contains" type="text" class="form-control"
+                               id="message-contains" aria-describedby="fromEmail"
+                               value="{{ result_filter.message_contains }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+            <button class="btn btn-info btn-round btn-sm pull-right" type="submit">Apply</button>
+        </div>
+    </form>
+
+    <div class="dropdown-divider"></div>
+    <hr>
     <div class="table-responsive">
         <table class="table">
             <thead>
