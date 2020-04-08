@@ -18,7 +18,8 @@
             </button>
         </div>
         <div class="col-sm-6">
-            <h4 class="text-white">Job applications (<span class="text-primary">{{ job_applications_count }}</span>)</h4>
+            <h4 class="text-white">Job applications (<span class="text-primary">{{ job_applications_count }}</span>)
+            </h4>
             <button class="btn btn-success animation-on-hover" type="button">Create</button>
             <button onclick="location.href='{% url 'clients:list-job-application' %}'"
                     class="btn btn-info animation-on-hover"
@@ -27,31 +28,64 @@
             <div class="chart-area">
                 <canvas id="job-applications-pie-chart"></canvas>
             </div>
+            <div class="bg bg-white mt-2">
+                <canvas height="250" id="job-applications-line-chart"></canvas>
+            </div>
         </div>
     </div>
 {% endblock %}
 {% block javascripts %}
     <script>
-        let config = {
+        let config_applications_pie = {
             type: 'pie',
             data: {
                 datasets: [{
-                    data: {{ chart_data|safe }},
+                    data: {{ chart_pie_data|safe }},
                     backgroundColor: ["rgb(165,210,27)", "rgb(134,133,242)", "rgb(120,200,161)", "rgb(165,73,199)"],
                     label: 'Applications status',
                     borderWidth: 0
                 }],
-                labels: {{ chart_labels|safe }}
+                labels: {{ chart_pie_labels|safe }}
             },
             options: {
                 responsive: true
             }
         };
-
         window.onload = function () {
-            let ctx = document.getElementById('job-applications-pie-chart').getContext('2d');
-            window.myPie = new Chart(ctx, config);
+            let ctx_application_pie = document.getElementById('job-applications-pie-chart').getContext('2d');
+            window.myPie = new Chart(ctx_application_pie, config_applications_pie);
         };
+
+        // job applications per month line chart
+        let speedCanvas = document.getElementById("job-applications-line-chart");
+        let application_count_data = {
+            label: "Applications number",
+            data: {{ chart_applications_line_x|safe }},
+            lineTension: 0,
+            fill: true,
+            borderColor: 'rgb(134,230,198)'
+        };
+        let speedData = {
+            labels: {{ chart_applications_line_y|safe }},
+            datasets: [application_count_data]
+        };
+        let options_applications_line_chart = {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    boxWidth: 80,
+                    fontColor: 'green'
+                }
+            }
+        };
+
+        let lineChart = new Chart(speedCanvas, {
+            type: 'line',
+            data: speedData,
+            options: options_applications_line_chart
+        });
+
 
     </script>
 {% endblock %}

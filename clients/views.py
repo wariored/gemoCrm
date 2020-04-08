@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
+from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -145,20 +146,24 @@ class StartupDetailView(DetailView):
 
 @login_required
 def client_jobs_index(request):
-    chart_labels = []
-    chart_data = []
     job_applications_grouped_by_status = JobApplication.objects.values('status').annotate(
         count=Count('status')).order_by()
-    for group in job_applications_grouped_by_status:
-        chart_labels.append(group['status'])
-        chart_data.append(group['count'])
+    chart_pie_labels = [group['status'] for group in job_applications_grouped_by_status]
+    chart_pie_data = [group['count'] for group in job_applications_grouped_by_status]
+
+    job_applications_grouped_by_applied_date = JobApplication.objects.annotate(month=TruncMonth('applied_at')).values(
+        'month').annotate(c=Count('id')).order_by('month')
+    chart_applications_line_x = [x["c"] for x in job_applications_grouped_by_applied_date]
+    chart_applications_line_y = [str(y["month"].date()) for y in job_applications_grouped_by_applied_date]
 
     job_positions_count = JobPosition.objects.count()
     jobs_applications_count = JobApplication.objects.count()
 
     context = {
-        'chart_labels': chart_labels,
-        'chart_data': chart_data,
+        'chart_pie_labels': chart_pie_labels,
+        'chart_pie_data': chart_pie_data,
+        'chart_applications_line_x': chart_applications_line_x,
+        'chart_applications_line_y': chart_applications_line_y,
         'job_positions_count': job_positions_count,
         'job_applications_count': jobs_applications_count
     }
@@ -230,11 +235,13 @@ class JobApplicationDetailView(DetailView):
 
 # exchange section
 
+@method_decorator(login_required, name='dispatch')
 class ExchangeDetailView(DetailView):
     model = Exchange
     template_name = 'clients/exchanges/detail_exchange.html'
 
 
+@method_decorator(login_required, name='dispatch')
 class ExchangeListView(ListView):
     model = Exchange
     template_name = 'clients/exchanges/list_exchange.html'
