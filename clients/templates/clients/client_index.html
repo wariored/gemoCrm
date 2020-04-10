@@ -1,5 +1,5 @@
 {% extends 'layout/base.html' %}
-{% load widget_tweaks %}
+{% load static widget_tweaks %}
 {% block title %}
     Client index page
 {% endblock %}
@@ -7,17 +7,65 @@
     Clients
 {% endblock %}
 {% block content %}
-    <h2 class="text-center">Clients Section</h2>
-    <div class="row">
-        <div class="col-sm-6">
-            <h4 class="text-white">Hackers (<span class="text-primary">{{ hackers_count }}</span>)</h4>
-            <button  onclick="location.href='{% url 'clients:create-hacker' %}'" class="btn btn-success animation-on-hover" type="button">Create</button>
-            <button onclick="location.href='{% url 'clients:list-hacker' %}'" class="btn btn-info animation-on-hover" type="button">View All</button>
+    <h2 class="text-center">Clients</h2>
+    <div class="form-group row">
+        <div class="col-sm-8 col-md-4">
+            <select id="clients" class="form-control">
+                <option value="startups" {% if client_type == "startups" %}selected{% endif %}>Startups</option>
+                <option value="hackers" {% if client_type == "hackers" %}selected{% endif %}>Hackers</option>
+            </select>
         </div>
-        <div class="col-sm-6">
-            <h4 class="text-white">Startups (<span class="text-primary">{{ startups_count }}</span>)</h4>
-            <button onclick="location.href='{% url 'clients:create-startup'%}'" class="btn btn-success animation-on-hover" type="button">Create</button>
-            <button onclick="location.href='{% url 'clients:list-startup'%}'" class="btn btn-info animation-on-hover" type="button">View All</button>
+        <div class="col-sm">
+            <button
+                    {% if client_type == "hackers" %}
+                        onclick="location.href='{% url 'clients:create-hacker' %}'"
+                    {% elif client_type == "startups" %}
+                        onclick="location.href='{% url 'clients:create-startup' %}'"
+                    {% endif %}
+                        class="btn btn-sm btn-round btn-success animation-on-hover pull-right" type="button">Create
+            </button>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input value="{{ search_text }}" id="search-text" name="search-text" class="form-control" type="text"
+                       placeholder="search">
+                <button onclick="HandleSearchText()" style="height: 37px !important;"
+                        class="btn btn-sm float-left mt-0 h-100"
+                        type="submit"><i
+                        class="fa fa-search"></i></button>
+            </div>
+        </div>
+        <div class="col-sm"></div>
+    </div>
+    <h5 class="text-white-50">Total : <span class="text-primary">{{ client_count }}</span>
+    </h5>
+    <div class="dropdown-divider"></div>
+
+    {% if client_type == "hackers" %}
+        {% include 'clients/hackers/_list_hacker_table.html' with is_paginated=True page_obj=hackers additional_params="&client-type=hackers&search-text="|add:search_text %}
+    {% elif client_type == "startups" %}
+        {% include 'clients/startups/_list_startup_table.html' with is_paginated=True page_obj=startups additional_params="&client-type=startups&search-text="|add:search_text %}
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+
+    <script src="{% static 'gemoCrm/js/search.js' %}"></script>
+    <script type="application/javascript">
+        let clientSelect = document.getElementById("clients");
+        let strHackers = "hackers";
+        let strStartups = "startups";
+        clientSelect.onchange = function () {
+            if (this.value === strHackers) {
+                pageUrl.searchParams.set('client-type', 'hackers');
+            } else if (this.value === strStartups) {
+                pageUrl.searchParams.set('client-type', 'startups');
+            }
+            pageUrl.searchParams.set('page', '1');
+            pageUrl.searchParams.set('search-text', '');
+            document.location.href = pageUrl.href;
+        };
+    </script>
 {% endblock %}

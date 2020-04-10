@@ -9,20 +9,20 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Startup Details #{{ startup.name|cut:" " }}</h5>
+            <h5 class="card-title font-weight-bold">Startup Details #{{ startup.name|cut:" " }}</h5>
         </div>
         <div class="card-body">
             <dl class="row">
                 <div class="col-sm-4">
                     <dt class="text-white-50">Name</dt>
-                    <dd class="">{{ startup.name }}</dd>
+                    <dd class="font-weight-bolder">{{ startup.name }}</dd>
                 </div>
                 <div class="col-sm-6">
                     <dt class="text-white-50">Email</dt>
-                    <dd class="">{{ startup.email }}</dd>
+                    <dd class="font-weight-bolder">{{ startup.email }}</dd>
                 </div>
                 <div class="col-sm-2">
-                    <dt class="text-white-50">Kind</dt>
+                    <dt class="text-white-50">Status</dt>
                     <dd class="">{{ startup.get_kind_display|default:"&nbsp;" }}</dd>
                 </div>
                 <div class="col-sm-4">
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-sm-12">
                     <button onclick="location.href='{% url 'clients:update-startup' startup.id %}'"
-                            class="btn btn-info animation-on-hove pull-right" type="button">Update
+                            class="btn btn-sm btn-round btn-info animation-on-hove pull-right" type="button">Update
                     </button>
                 </div>
             </dl>

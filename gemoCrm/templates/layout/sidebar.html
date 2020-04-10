@@ -1,8 +1,8 @@
 <div class="logo">
-    <a href="javascript:void(0)" class="simple-text logo-mini">
-        CT
+    <a href="javascript:void(0)" class="simple-text text-white-50 logo-mini">
+        <!-- logo goes here-->
     </a>
-    <a href="javascript:void(0)" class="simple-text logo-normal">
+    <a href="javascript:void(0)" class="simple-text text-white-50 font-weight-bold logo-normal">
         Gemo CRM
     </a>
 </div>
@@ -11,28 +11,28 @@
     <li {% if request.get_full_path == index_url %}class="active"{% endif %}>
         <a href="{{ index_url }}">
             <i class="tim-icons icon-chart-pie-36"></i>
-            <p>Teams</p>
+            <p class="font-weight-bold">Teams</p>
         </a>
     </li>
     {% url 'clients:client-index' as client_index_url %}
-    <li {% if request.get_full_path == client_index_url %}class="active"{% endif %}>
+    <li {% if client_index_url in request.get_full_path %}class="active"{% endif %}>
         <a href="{{ client_index_url }}">
             <i class="tim-icons icon-puzzle-10"></i>
-            <p>Clients</p>
+            <p class="font-weight-bold">Clients</p>
         </a>
     </li>
     {% url 'clients:client-jobs-index' as client_jobs_index_url %}
     <li {% if request.get_full_path == client_jobs_index_url %}class="active"{% endif %}>
         <a href="{{ client_jobs_index_url }}">
             <i class="tim-icons icon-atom"></i>
-            <p>Jobs</p>
+            <p class="font-weight-bold">Jobs</p>
         </a>
     </li>
     {% url 'clients:list-exchange' as exchanges_url %}
-    <li {% if request.get_full_path == exchanges_url %}class="active"{% endif %}>
+    <li {% if exchanges_url in request.get_full_path %}class="active"{% endif %}>
         <a href="{{ exchanges_url }}">
             <i class="tim-icons icon-chat-33"></i>
-            <p>Exchanges</p>
+            <p class="font-weight-bold">Exchanges</p>
         </a>
     </li>
 </ul>

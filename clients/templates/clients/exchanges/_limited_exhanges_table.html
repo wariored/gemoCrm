@@ -1,4 +1,4 @@
-<h4 class="text-center text-white-50">Last Exchanges</h4>
+<h4 class="text-center text-white-50 font-weight-bold">Last Exchanges</h4>
 <div class="table-responsive border border-info">
     <table class="table">
         <thead>
@@ -12,12 +12,12 @@
         <tbody>
             {% for exchange in exchanges|slice:"3" %}
                 <tr>
-                    <td> {{ exchange.from_email }}</td>
-                    <td>{{ exchange.to_email }}</td>
+                    <td class="font-weight-light"> {{ exchange.from_email }}</td>
+                    <td class="font-weight-light">{{ exchange.to_email }}</td>
                     <td><a
                            href="{% url 'clients:detail-exchange' exchange.id %}">{{ exchange.message|truncatechars:"30" }}</a>
                     </td>
-                    <td>{{ exchange.sent_date }}</td>
+                    <td class="font-weight-light">{{ exchange.sent_date }}</td>
                 </tr>
             {% endfor %}
             {% if exchanges.count > 3 %}

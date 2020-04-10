@@ -9,18 +9,18 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Exchange from <span class="text-success"> {{ exchange.get_from_type_display }}</span>
+            <h5 class="card-title font-weight-bold">Exchange from <span class="text-success"> {{ exchange.get_from_type_display }}</span>
                 to <span class="text-success">{{ exchange.get_to_type_display }}</span></h5>
         </div>
         <div class="card-body">
             <dl class="row">
                 <div class="col-sm-4">
                     <dt class="text-white-50">From</dt>
-                    <dd class="">{{ exchange.get_from }}</dd>
+                    <dd class="font-weight-bold">{{ exchange.get_from }}</dd>
                 </div>
                 <div class="col-sm-4">
                     <dt class="text-white-50">To</dt>
-                    <dd class="">{{ exchange.get_to }}</dd>
+                    <dd class="font-weight-bold">{{ exchange.get_to }}</dd>
                 </div>
                 <div class="col-sm-4">
                     <dt class="text-white-50">Sent at</dt>

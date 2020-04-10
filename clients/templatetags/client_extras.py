@@ -24,3 +24,11 @@ def exchanges_team_members_details(email: str):
             exchanges_grouped[exchange.to_email]["count"] += 1
     exchanges_grouped = {x: y for x, y in exchanges_grouped.items() if y["count"] > 0}
     return exchanges_grouped
+
+
+@register.filter(name="status_class")
+def status_class(status: str):
+    return {
+        "rejected": "text-danger",
+        "hired": "text-success"
+    }.get(status, "text-primary")

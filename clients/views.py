@@ -16,12 +16,38 @@ from gemoCrm.utils.pagination_handler import get_pagination_data
 
 @login_required
 def client_index(request):
-    hackers_count = Hacker.objects.count()
-    startups_count = Startup.objects.count()
+    page = request.GET.get('page')
+    client_type = request.GET.get('client-type')
+    search_text = request.GET.get('search-text', '')
+    paginate_by = 15
+
+    if client_type == "hackers":
+        hackers = Hacker.objects.all()
+        if search_text:
+            hackers = hackers.filter(Q(email__icontains=search_text) | Q(first_name__icontains=search_text) | Q(
+                last_name__icontains=search_text))
+        paginator = Paginator(hackers, paginate_by)
+        client_count = Hacker.objects.count()
+
+    else:
+        startups = Startup.objects.all()
+        if search_text:
+            startups = startups.filter(
+                Q(email__icontains=search_text) | Q(name__icontains=search_text) | Q(country__icontains=search_text))
+        paginator = Paginator(startups, paginate_by)
+        client_type = "startups"
+        client_count = Startup.objects.count()
+
+    pagination_values = get_pagination_data(paginator, page)
+
     context = {
-        'hackers_count': hackers_count,
-        'startups_count': startups_count
+        'client_type': client_type,
+        'paginator': paginator,
+        'client_count': client_count,
+        'search_text': search_text,
+        client_type: pagination_values
     }
+
     return render(request, 'clients/client_index.html', context)
 
 
@@ -146,26 +172,34 @@ class StartupDetailView(DetailView):
 
 @login_required
 def client_jobs_index(request):
-    job_applications_grouped_by_status = JobApplication.objects.values('status').annotate(
-        count=Count('status')).order_by()
-    chart_pie_labels = [group['status'] for group in job_applications_grouped_by_status]
-    chart_pie_data = [group['count'] for group in job_applications_grouped_by_status]
+    job_type = request.GET.get('job-type', "applications")
+    job_count = None
+    chart_values = {}
+    if job_type == "applications":
+        job_count = JobApplication.objects.count()
+        job_applications_grouped_by_status = JobApplication.objects.values('status').annotate(
+            count=Count('status')).order_by()
+        chart_pie_labels = [group['status'] for group in job_applications_grouped_by_status]
+        chart_pie_data = [group['count'] for group in job_applications_grouped_by_status]
 
-    job_applications_grouped_by_applied_date = JobApplication.objects.annotate(month=TruncMonth('applied_at')).values(
-        'month').annotate(c=Count('id')).order_by('month')
-    chart_applications_line_x = [x["c"] for x in job_applications_grouped_by_applied_date]
-    chart_applications_line_y = [str(y["month"].date()) for y in job_applications_grouped_by_applied_date]
-
-    job_positions_count = JobPosition.objects.count()
-    jobs_applications_count = JobApplication.objects.count()
+        job_applications_grouped_by_applied_date = JobApplication.objects.annotate(
+            month=TruncMonth('applied_at')).values(
+            'month').annotate(c=Count('id')).order_by('month')
+        chart_applications_line_x = [x["c"] for x in job_applications_grouped_by_applied_date]
+        chart_applications_line_y = [str(y["month"].date()) for y in job_applications_grouped_by_applied_date]
+        chart_values = {
+            'chart_pie_labels': chart_pie_labels,
+            'chart_pie_data': chart_pie_data,
+            'chart_applications_line_x': chart_applications_line_x,
+            'chart_applications_line_y': chart_applications_line_y
+        }
+    else:
+        job_count = JobPosition.objects.count()
 
     context = {
-        'chart_pie_labels': chart_pie_labels,
-        'chart_pie_data': chart_pie_data,
-        'chart_applications_line_x': chart_applications_line_x,
-        'chart_applications_line_y': chart_applications_line_y,
-        'job_positions_count': job_positions_count,
-        'job_applications_count': jobs_applications_count
+        'job_type': job_type,
+        'job_count': job_count,
+        'chart_values': chart_values,
     }
     return render(request, 'clients/jobs/jobs_index.html', context)
 

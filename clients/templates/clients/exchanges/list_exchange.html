@@ -18,7 +18,7 @@
     {% else %}
         <h2 class="text-center text-info">Exchanges</h2>
     {% endif %}
-    <button class="btn btn-sm text-info collapsed">
+    <button class="btn btn-sm text-info font-weight-normal">
         Filters
     </button>
     <form action="" method="get">
@@ -26,7 +26,7 @@
             <div class="col-sm-1"></div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label text-info" for="from">from</label>
+                    <label class="col-sm-2 col-form-label text-info font-weight-light" for="from">from</label>
                     <div class="col-sm-10">
                         <input name="from-email" type="email" class="form-control"
                                id="from" aria-describedby="fromEmail" value="{{ result_filter.from }}">
@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-1 col-form-label text-info" for="to">to</label>
+                    <label class="col-sm-1 col-form-label text-info font-weight-light" for="to">to</label>
                     <div class="col-sm-10">
                         <input name="to-email" type="email" class="form-control" id="to"
                                aria-describedby="fromEmail" value="{{ result_filter.to }}">
@@ -47,7 +47,7 @@
             <div class="col-sm-1"></div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label text-info" for="date-from">range</label>
+                    <label class="col-sm-2 col-form-label text-info font-weight-light" for="date-from">range</label>
                     <div class="col-sm-10">
                         <input id="date-from" class="form-control" type="date" name="from-date" max="3000-12-31"
                                min="1000-01-01" value="{{ result_filter.from_date }}">
@@ -56,7 +56,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-1 col-form-label text-info" for="date-to">and</label>
+                    <label class="col-sm-1 col-form-label text-info font-weight-light" for="date-to">and</label>
                     <div class="col-sm-10">
                         <input type="date" name="to-date" max="3000-12-31"
                                min="1000-01-01" class="form-control" id="date-to" value="{{ result_filter.to_date }}">
@@ -68,7 +68,7 @@
             <div class="col-sm-3"></div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label text-info" for="message-contains">contains</label>
+                    <label class="col-sm-3 col-form-label text-info font-weight-light" for="message-contains">contains</label>
                     <div class="col-sm-9">
                         <input name="message-contains" type="text" class="form-control"
                                id="message-contains" aria-describedby="fromEmail"
@@ -77,7 +77,7 @@
                 </div>
             </div>
             <div class="col-md-2"></div>
-            <button class="btn btn-info btn-round btn-sm pull-right" type="submit">Apply</button>
+            <button class="btn btn-info btn-round btn-sm pull-right font-weight-normal" type="submit">Apply</button>
         </div>
     </form>
 
@@ -98,12 +98,12 @@
                 {% for exchange in exchanges %}
                     <tr>
                         <td class="text-center">{{ forloop.counter }}</td>
-                        <td> {{ exchange.from_email }}</td>
-                        <td>{{ exchange.to_email }}</td>
-                        <td><a class="text-warning"
+                        <td class="font-weight-light"> {{ exchange.from_email }}</td>
+                        <td class="font-weight-light">{{ exchange.to_email }}</td>
+                        <td class="font-weight-light"><a class="text-warning"
                                href="{% url 'clients:detail-exchange' exchange.id %}">{{ exchange.message|truncatechars:"30" }}</a>
                         </td>
-                        <td>{{ exchange.sent_date }}</td>
+                        <td class="font-weight-light">{{ exchange.sent_date }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

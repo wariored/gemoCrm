@@ -9,21 +9,21 @@
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Hacker Details #{{ hacker }}</h5>
+            <h5 class="card-title font-weight-bold">Hacker Details #{{ hacker }}</h5>
         </div>
         <div class="card-body">
             <dl class="row">
                 <div class="col-sm-6">
                     <dt class="text-white-50">First Name</dt>
-                    <dd class="">{{ hacker.first_name }}</dd>
+                    <dd class="font-weight-bolder">{{ hacker.first_name }}</dd>
                 </div>
                 <div class="col-sm-6">
                     <dt class="text-white-50">Last Name</dt>
-                    <dd class="">{{ hacker.last_name }}</dd>
+                    <dd class="font-weight-bolder">{{ hacker.last_name }}</dd>
                 </div>
                 <div class="col-sm-6">
                     <dt class="text-white-50">Email</dt>
-                    <dd class="">{{ hacker.email }}</dd>
+                    <dd class="font-weight-bolder">{{ hacker.email }}</dd>
                 </div>
                 <div class="col-sm-3">
                     <dt class="text-white-50">City</dt>
@@ -76,46 +76,45 @@
                 </div>
                 <div class="col-sm-12">
                     <button onclick="location.href='{% url 'clients:update-hacker' hacker.id %}'"
-                            class="btn btn-info btn-round animation-on-hover pull-right" type="button">Update
+                            class="btn btn-info btn-round btn-sm animation-on-hover pull-right" type="button">Update
                     </button>
                 </div>
             </dl>
-
-            <h4 class="text-center text-white-50">Job Applications Details</h4>
-            <div class="table-responsive border border-info">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th>Application Id</th>
-                        <th>Status</th>
-                        <th>Position Ids</th>
-                        <th class="text-center">Applied at</th>
-                        <th class="text-center">Rejected At</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for job in hacker.job_applications.all %}
-                            <tr>
-                                <td class="text-center">{{ forloop.counter }}</td>
-                                <td>
-                                    <a href="{% url 'clients:detail-job-application' job.id %}">#{{ job.external_id }}</a>
-                                </td>
-                                <td>{{ job.status }}</td>
-                                <td>
-                                    {% for position in job.positions.all %}
-                                        <a href="{% url 'clients:detail-job-position' position.id %}">#{{ position.external_id }}</a>
-                                    {% endfor %}
-                                </td>
-                                <td class="td-actions">{{ job.applied_at|default:"" }}</td>
-                                <td class="td-actions">{{ job.rejected_at|default:"" }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <br>
-            {% include 'clients/exchanges/_limited_exhanges_table.html' with client="hacker" email=hacker.email %}
         </div>
     </div>
+    <h4 class="text-center text-white-50 font-weight-bold">Job Applications Details</h4>
+        <div class="table-responsive border border-info">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th>Application Id</th>
+                    <th>Status</th>
+                    <th>Position Ids</th>
+                    <th class="text-center">Applied at</th>
+                    <th class="text-center">Rejected At</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for job in hacker.job_applications.all %}
+                        <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'clients:detail-job-application' job.id %}">#{{ job.external_id }}</a>
+                            </td>
+                            <td class="font-weight-light"><span class="{{ job.status|status_class }}">{{ job.status }}</span></td>
+                            <td>
+                                {% for position in job.positions.all %}
+                                    <a href="{% url 'clients:detail-job-position' position.id %}">#{{ position.external_id }}</a>
+                                {% endfor %}
+                            </td>
+                            <td class="td-actions font-weight-light">{{ job.applied_at|default:"" }}</td>
+                            <td class="td-actions font-weight-light">{{ job.rejected_at|default:"" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        {% include 'clients/exchanges/_limited_exhanges_table.html' with client="hacker" email=hacker.email %}
 {% endblock %}

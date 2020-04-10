@@ -4,7 +4,7 @@ from . import views
 
 app_name = 'clients'
 urlpatterns = [
-    path('', views.client_index, name='client-index'),
+    path('index', views.client_index, name='client-index'),
     path('hackers/import', views.import_from_greenhouse, name='client-import'),
     # hacker path
     path('hackers/create', views.CreateHackerView.as_view(), name='create-hacker'),

@@ -1,91 +1,115 @@
 {% extends 'layout/base.html' %}
-{% load widget_tweaks %}
+{% load static widget_tweaks %}
 {% block title %}
     Jobs index page
 {% endblock %}
 {% block dashboard_title %}
     Jobs
 {% endblock %}
+{% block stylesheets %}
+    <link href="{% static 'gemoCrm/css/chart_handler.css' %}" rel="stylesheet"/>
+{% endblock %}
 {% block content %}
-    <h2 class="text-center">Jobs Section</h2>
-    <div class="row">
-        <div class="col-sm-6">
-            <h4 class="text-white">Job Positions (<span class="text-primary">{{ job_positions_count }}</span>)</h4>
-            <button class="btn btn-success animation-on-hover" type="button">Create</button>
-            <button onclick="location.href='{% url 'clients:list-job-position' %}'"
-                    class="btn btn-info animation-on-hover"
-                    type="button">View All
-            </button>
+    <h2 class="text-center">
+        Jobs
+    </h2>
+    <div class="form-group row">
+        <div class="col-sm-8 col-md-4">
+            <select id="jobs-select" class="form-control">
+                <option value="positions" {% if job_type == "positions" %}selected{% endif %}>Positions</option>
+                <option value="applications" {% if job_type == "applications" %}selected{% endif %}>Applications
+                </option>
+            </select>
         </div>
-        <div class="col-sm-6">
-            <h4 class="text-white">Job applications (<span class="text-primary">{{ job_applications_count }}</span>)
-            </h4>
-            <button class="btn btn-success animation-on-hover" type="button">Create</button>
-            <button onclick="location.href='{% url 'clients:list-job-application' %}'"
-                    class="btn btn-info animation-on-hover"
-                    type="button">View All
+        <div class="col-sm">
+            <button
+                    {% if job_type == "positions" %}
+                        onclick="location.href='{% url 'clients:list-job-position' %}'"
+                    {% elif job_type == "applications" %}
+                        onclick="location.href='{% url 'clients:list-job-application' %}'"
+                    {% endif %}
+                        class="btn btn-sm btn-round btn-info animation-on-hover pull-right" type="button">View list
             </button>
-            <div class="chart-area">
-                <canvas id="job-applications-pie-chart"></canvas>
-            </div>
-            <div class="bg bg-white mt-2">
-                <canvas height="250" id="job-applications-line-chart"></canvas>
-            </div>
         </div>
     </div>
+    <h5 class="text-white-50">Total : <span class="text-primary">{{ job_count }}</span>
+    </h5>
+    {% if job_type == "applications" %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card card-chart">
+                    <div class="card-header ">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <h5 class="card-category">Total Applications</h5>
+                                <h2 class="card-title">Monthly count</h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-primary btn-simple active" id="0">
+                                        <input type="radio" name="options" checked>
+                                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Count per month</span>
+                                        <span class="d-block d-sm-none">
+                          <i class="tim-icons icon-single-02"></i>
+                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartBig1"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm"></div>
+            <div class="col-6">
+                <div class="card card-chart">
+                    <div class="card-header ">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <h5 class="card-category">Applications status</h5>
+                                <h2 class="card-title">Status Count</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="job-applications-pie-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm"></div>
+
+        </div>
+    {% endif %}
+
 {% endblock %}
 {% block javascripts %}
+    <script type="application/javascript">
+        let pageUrl = new URL(document.location.href);
+        let jobSelect = document.getElementById("jobs-select");
+        jobSelect.onchange = function () {
+            pageUrl.searchParams.set('job-type', this.value);
+            document.location.href = pageUrl.href;
+        };
+    </script>
     <script>
-        let config_applications_pie = {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: {{ chart_pie_data|safe }},
-                    backgroundColor: ["rgb(165,210,27)", "rgb(134,133,242)", "rgb(120,200,161)", "rgb(165,73,199)"],
-                    label: 'Applications status',
-                    borderWidth: 0
-                }],
-                labels: {{ chart_pie_labels|safe }}
-            },
-            options: {
-                responsive: true
-            }
-        };
-        window.onload = function () {
-            let ctx_application_pie = document.getElementById('job-applications-pie-chart').getContext('2d');
-            window.myPie = new Chart(ctx_application_pie, config_applications_pie);
-        };
-
         // job applications per month line chart
-        let speedCanvas = document.getElementById("job-applications-line-chart");
-        let application_count_data = {
-            label: "Applications number",
-            data: {{ chart_applications_line_x|safe }},
-            lineTension: 0,
-            fill: true,
-            borderColor: 'rgb(134,230,198)'
-        };
-        let speedData = {
-            labels: {{ chart_applications_line_y|safe }},
-            datasets: [application_count_data]
-        };
-        let options_applications_line_chart = {
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    boxWidth: 80,
-                    fontColor: 'green'
-                }
-            }
-        };
+        let chart_status_data = {{ chart_values.chart_pie_data|safe }};
+        let chart_status_labels = {{ chart_values.chart_pie_labels|safe }};
+        let chart_line_data = {{ chart_values.chart_applications_line_x|safe }};
+        let chart_line_labels = {{ chart_values.chart_applications_line_y|safe }};
+    </script>
+    <script src="{% static 'gemoCrm/js/chart_handler.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            // Javascript method's body can be found in assets/js/demos.js
+            demo.initDashboardPageCharts();
 
-        let lineChart = new Chart(speedCanvas, {
-            type: 'line',
-            data: speedData,
-            options: options_applications_line_chart
         });
-
-
     </script>
 {% endblock %}
