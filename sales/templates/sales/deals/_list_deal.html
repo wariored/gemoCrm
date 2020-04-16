@@ -1,0 +1,39 @@
+<div class="table-responsive mt-3">
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th>Name</th>
+            <th>Deal Stage</th>
+            <th class="text-right">Amount</th>
+            <th>Deal Type</th>
+            <th>Contact</th>
+            <th>Company</th>
+            <th>Owner</th>
+            <th>Closed at</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for deal in deals %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="font-weight-light"><a href="{{ deal.get_absolute_url }}">{{ deal.name }}</a></td>
+                    <td class="font-weight-light">{{ deal.deal_stage|default:"" }}</td>
+                    <td class="font-weight-light text-right">{{ deal.amount }}</td>
+                    <td class="font-weight-light">{{ deal.deal_type }}</td>
+                    <td class="font-weight-light">
+                        <a href="{{ deal.contact.get_absolute_url }}">{{ deal.contact|default:"" }}</a>
+                    </td>
+                    <td class="font-weight-light">
+                        <a href="{{ deal.company.get_absolute_url }}">{{ deal.company|default:"" }}</a>
+                    </td>
+                    <td class="font-weight-light">{{ deal.owner|default:"" }}</td>
+                    <td class="font-weight-light pul">{{ deal.closed_at|default:"" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+        {% include "layout/_pagination.html" %}
+    {% endif %}
+</div>

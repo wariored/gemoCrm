@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'kronos',
     'gemoCrm',
-    'clients'
+    'clients',
+    'sales'
 ]
 
 MIDDLEWARE = [

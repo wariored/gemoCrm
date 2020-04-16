@@ -1,0 +1,27 @@
+<div class="table-responsive mt-3">
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Company</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="font-weight-light">{{ contact.first_name }}</td>
+                    <td class="font-weight-light">{{ contact.last_name }}</td>
+                    <td class="font-weight-light"><a href="{{ contact.get_absolute_url }}">{{ contact.email }}</a></td>
+                    <td class="font-weight-light">{{ contact.startup|default:"" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+        {% include "layout/_pagination.html" %}
+    {% endif %}
+</div>

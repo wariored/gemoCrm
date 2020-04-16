@@ -1,0 +1,50 @@
+{% load widget_tweaks %}
+<form method="post" action="{{ form_url }}">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md pr-md-1">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        {% render_field form.first_name class="form-control" %}
+                        {% for error in form.first_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md px-md-1 ml-2">
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        {% render_field form.last_name class="form-control" %}
+                        {% for error in form.last_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md"></div>
+            </div>
+        </div>
+            <div class="col-md-4 ">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    {% render_field form.email class="form-control" %}
+                    {% for error in form.email.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Company</label>
+                {% render_field form.startup class="form-control" %}
+                {% for error in form.startup.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+        <button type="submit" class="btn btn-fill btn-primary">Save</button>
+</form>

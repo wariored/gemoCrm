@@ -1,0 +1,11 @@
+{% extends 'layout/base.html' %}
+{% load static widget_tweaks %}
+{% block title %}
+    Sales: update deal {{ deal.name }}
+{% endblock %}
+{% block dashboard_title %}
+    Update Deal
+{% endblock %}
+{% block content %}
+    {% include 'sales/deals/_deal_create_update_form.html' %}
+{% endblock %}

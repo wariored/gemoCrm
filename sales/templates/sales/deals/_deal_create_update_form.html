@@ -1,0 +1,80 @@
+{% load widget_tweaks %}
+<form method="post" action="{{ form_url }}">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-12 pr-md-1">
+            <div class="form-row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Deal Name</label>
+                        {% render_field form.name class="form-control" %}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-2 pl-md-1">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Amount</label>
+                        {% render_field form.amount class="form-control" %}
+                        {% for error in form.amount.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 pr-md-1">
+            <div class="form-row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Deal Stage</label>
+                        {% render_field form.deal_stage class="form-control" %}
+                        {% for error in form.deal_stage.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Deal Type</label>
+                        {% render_field form.deal_type class="form-control" %}
+                        {% for error in form.deal_type.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 pr-md-1">
+            <div class="form-group">
+                <label>Contact</label>
+                {% render_field form.contact class="form-control" %}
+                {% for error in form.contact.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4 px-md-1">
+            <div class="form-group">
+                <label>Company</label>
+                {% render_field form.company class="form-control" %}
+                {% for error in form.company.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4 pl-md-1">
+            <div class="form-group">
+                <label>Owner</label>
+                {% render_field form.owner class="form-control" %}
+                {% for error in form.owner.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-fill btn-primary">Save</button>
+</form>

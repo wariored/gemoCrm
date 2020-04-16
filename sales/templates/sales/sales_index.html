@@ -1,0 +1,163 @@
+{% extends 'layout/base.html' %}
+{% load static widget_tweaks %}
+{% block title %}
+    Sales Dashboard
+{% endblock %}
+{% block dashboard_title %}
+    Sales
+{% endblock %}
+{% block content %}
+    <section id="tabs" class="project-tab">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            {% url 'sales:list-contact' as list_contacts_url %}
+                            {% url 'sales:list-deal' as list_deals_url %}
+                            <a
+                                    {% if list_contacts_url in request.get_full_path %}
+                                        class="nav-item nav-link active font-weight-bolder"
+                                        aria-selected="true"
+                                    {% else %}
+                                        class="nav-item nav-link"
+                                    {% endif %}
+                                        id="nav-home-tab" href="{{ list_contacts_url }}"
+                                        role="tab" aria-controls="nav-home">Contacts</a>
+                            <a
+                                    {% if list_deals_url in request.get_full_path %}
+                                        class="nav-item nav-link active font-weight-bolder"
+                                        aria-selected="true"
+                                    {% else %}
+                                        class="nav-item nav-link"
+                                    {% endif %} id="nav-profile-tab" href="{{ list_deals_url }}"
+                                        role="tab" aria-controls="nav-profile">Deals</a>
+
+                        </div>
+                    </nav>
+                </div>
+                {% if list_contacts_url in request.get_full_path %}
+                    <div class="col-md-12">
+                        <a href="{% url 'sales:create-contact' %}"
+                           class="text-info animation-on-hover mt-2 float-right">
+                            <i class="tim-icons icon-simple-add"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-sm"></div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input value="{{ template_params.search_text }}" id="search-text" name="search-text"
+                                           class="form-control" type="text"
+                                           placeholder="search">
+                                    <button onclick="HandleSearchText()" style="height: 37px !important;"
+                                            class="btn btn-sm float-left mt-0 h-100"
+                                            type="submit"><i
+                                            class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-sm"></div>
+                        </div>
+                    </div>
+                    <!--<h5 class="text-white-50">Total : <span class="text-primary">{{ contacts.count }}</span>
+                    </h5>-->
+                    {% include 'sales/contacts/_list_contact.html' %}
+                {% endif %}
+                {% if list_deals_url in request.get_full_path %}
+                    <div class="col-md-12">
+                        <a href="{% url 'sales:create-deal' %}"
+                           class="text-info animation-on-hover mt-2 float-right">
+                            <i class="tim-icons icon-simple-add"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-12">
+                        <form action="" method="get">
+                            <div class="row">
+                                <div class="col-sm-1"></div>
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-info font-weight-light"
+                                               for="deal-stage">Deal Stage</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" name="deal-stage" id="deal-stage">
+                                                <option value="">----</option>
+                                                {% for stage in deal_stages %}
+                                                    <option {% if filter_params.deal_stage == stage.name %}selected{% endif %}
+                                                            value="{{ stage.name }}">{{ stage.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-info font-weight-light"
+                                               for="deal-type">Deal Type</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" name="deal-type" id="deal-type">
+                                                <option value="">----</option>
+                                                {% for type in deal_types %}
+                                                    <option {% if filter_params.deal_type == type.name %}selected{% endif %} value="{{ type.name }}">{{ type.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-1"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-info font-weight-light"
+                                               for="amount-from">range</label>
+                                        <div class="col-sm-10">
+                                            <input id="amount-from" class="form-control" type="number"
+                                                   name="amount-from"
+                                                   value="{{ filter_params.amount_from }}" placeholder="enter amount">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-1 col-form-label text-info font-weight-light"
+                                               for="amount-to">to</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" name="amount-to"
+                                                   class="form-control" id="amount-to"
+                                                   value="{{ filter_params.amount_to }}" placeholder="enter amount">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label text-info font-weight-light"
+                                               for="contains-text">contains</label>
+                                        <div class="col-sm-9">
+                                            <input name="contains-text" type="text" class="form-control"
+                                                   id="contains-text"
+                                                   value="{{ filter_params.contains_text|default:'' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2"></div>
+                                <button class="btn btn-info btn-round btn-sm pull-right font-weight-normal"
+                                        type="submit">
+                                    Apply
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <h5 class="text-white-50">Total : <span class="text-primary">{{ deals.count }}</span></h5>-->
+                    {% include 'sales/deals/_list_deal.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'gemoCrm/js/search.js' %}"></script>
+{% endblock %}

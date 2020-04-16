@@ -35,4 +35,11 @@
             <p class="font-weight-bold">Exchanges</p>
         </a>
     </li>
+    {% url 'sales:list-contact' as sales_url %}
+    <li {% if 'sales' in request.get_full_path %}class="active"{% endif %}>
+        <a href="{{ sales_url }}">
+            <i class="tim-icons icon-world"></i>
+            <p class="font-weight-bold">Sales</p>
+        </a>
+    </li>
 </ul>

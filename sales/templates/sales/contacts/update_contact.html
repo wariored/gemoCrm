@@ -1,0 +1,11 @@
+{% extends 'layout/base.html' %}
+{% load static widget_tweaks %}
+{% block title %}
+    Sales: update contact {{ contact.first_name }} {{ contact.last_name }}
+{% endblock %}
+{% block dashboard_title %}
+    Update Contact
+{% endblock %}
+{% block content %}
+    {% include 'sales/contacts/_contact_create_update_form.html' %}
+{% endblock %}

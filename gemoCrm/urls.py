@@ -28,5 +28,6 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('profile-update/<int:pk>', views.ProfileUpdateView.as_view(), name='update-profile'),
     path('general-search/', views.GeneralSearchView.as_view(), name='general-search'),
-    path('clients/', include('clients.urls'))
+    path('clients/', include('clients.urls')),
+    path('sales/', include('sales.urls'))
 ]
