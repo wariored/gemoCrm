@@ -20,6 +20,7 @@ from django.conf.urls import url
 from . import views
 
 app_name = "gemoCrm"
+admin.site.site_header = "Gemo CRM administration"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
