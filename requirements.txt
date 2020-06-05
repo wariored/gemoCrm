@@ -1,4 +1,4 @@
-django==3.0.3
+django==3.0.7
 psycopg2==2.8.4
 django-widget-tweaks==1.4.8
 django-kronos==1.0
